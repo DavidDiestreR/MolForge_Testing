@@ -8,6 +8,7 @@ Aquí encontrarás instrucciones claras para preparar el entorno y ejecutar el c
 ## ⚙️ Requisitos previos
 
 - Tener instalado **[Conda](https://docs.conda.io/en/latest/miniconda.html)** (se recomienda Miniconda o Mambaforge).
+- Una vez instalado MiniConda por primera vez abrir AnacondaPrompt y escribir "conda init bash"
 - Conexión a internet para instalar los paquetes.
 - (Opcional) GPU NVIDIA con drivers actualizados, si deseas acelerar el cálculo.
 
