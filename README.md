@@ -22,7 +22,7 @@ La única diferencia entre CPU y GPU está en cómo se instala **PyTorch**.
 ```bash
 # Clonar este repositorio
 git clone https://github.com/DavidDiestreR/MolForge_Testing.git
-cd <TU_REPO>
+cd MolForge_Testing
 
 # Crear el entorno base a partir de environment.yml
 conda env create -f environment.yml -n molforge
