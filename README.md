@@ -26,8 +26,8 @@ git clone https://github.com/DavidDiestreR/MolForge_Testing.git
 cd MolForge_Testing
 
 # Crear el entorno base a partir de environment.yml
-conda env create -f environment.yml -n molforge
-conda activate molforge
+conda env create -f environment.yml -n env
+conda activate env
 
 # Comprovar que estamos en el entorno
 python -c "import sys; print(sys.executable)"
@@ -35,8 +35,8 @@ python -c "import sys; print(sys.executable)"
 # Eliminar un paquete del entorno
 conda remove <nombre_paquete>
 
-# eliminar el entorno ('molforge')
-conda remove -n molforge --all
+# eliminar el entorno ('env')
+conda remove -n env --all
 
 ```
 
@@ -74,7 +74,7 @@ Comprueba que todo funciona:
 ```bash
 python - << 'PY'
 import torch, molforge, rdkit, pandas, matplotlib, seaborn, selfies, tqdm, sentencepiece, gdown, rich
-print("molforge: OK")
+print("env: OK")
 print("torch:", torch.__version__, "| cuda avail:", torch.cuda.is_available())
 PY
 ```
@@ -136,7 +136,7 @@ Para ello:
 4. En el otro PC, actualiza el entorno:
    ```bash
    git pull
-   conda env update -n molforge -f environment.yml
+   conda env update -n env -f environment.yml
    ```
 
 👉 Esto instalará **solo los paquetes nuevos o actualizados**.  
