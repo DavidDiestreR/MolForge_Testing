@@ -1,4 +1,4 @@
-name: molforge
+name: env
 channels:
   - conda-forge
   - defaults
