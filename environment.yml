@@ -14,13 +14,16 @@ dependencies:
   - ipykernel
   - jupyterlab
 
-  # Herramientas varias
+  # Herramientas necesarias para instalar paquetes desde GitHub
+  - git
   - pip
+  - setuptools
+  - wheel
 
-  # Paquetes que instalamos por pip (incluye MolForge desde GitHub)
+  # Paquetes vía pip (incluye MolForge directamente desde GitHub)
   - pip:
       - selfies
       - sentencepiece
       - gdown
       - rich
-      - git+https://github.com/knu-lcbc/MolForge.git
+      - "molforge @ git+https://github.com/knu-lcbc/MolForge.git"

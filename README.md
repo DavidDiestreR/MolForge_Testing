@@ -60,7 +60,8 @@ conda install -y pytorch -c pytorch -c conda-forge
 
 #### 🔹 Opción GPU (PC con NVIDIA, recomendado en torre)
 ```bash
-conda install -y pytorch pytorch-cuda=12.1 -c pytorch -c nvidia
+python -m pip install --upgrade pip
+python -m pip install --index-url https://download.pytorch.org/whl/cu121 torch torchvision torchaudio
 ```
 
 > ⚠️ Importante: no instales ambas variantes a la vez; usa **solo una** según tu hardware.
