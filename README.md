@@ -74,8 +74,9 @@ Comprueba que todo funciona:
 
 ```bash
 python - << 'PY'
-import torch, molforge, rdkit, pandas, matplotlib, seaborn, selfies, tqdm, sentencepiece, gdown, rich
+import torch, MolForge, rdkit, pandas, matplotlib, seaborn, selfies, tqdm, sentencepiece, gdown, rich
 print("env: OK")
+print("MolForge OK ->", MolForge.__file__)
 print("torch:", torch.__version__, "| cuda avail:", torch.cuda.is_available())
 if torch.cuda.is_available():
     print("device:", torch.cuda.get_device_name(0))
