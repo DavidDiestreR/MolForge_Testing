@@ -32,6 +32,9 @@ conda activate env
 # Comprovar que estamos en el entorno
 python -c "import sys; print(sys.executable)"
 
+# Apagar el entorno
+conda deactivate
+
 # Eliminar un paquete del entorno
 conda remove <nombre_paquete>
 
