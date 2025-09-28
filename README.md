@@ -32,6 +32,9 @@ conda activate env
 # Comprovar que estamos en el entorno
 python -c "import sys; print(sys.executable)"
 
+# Apagar el entorno
+conda deactivate
+
 # Eliminar un paquete del entorno
 conda remove <nombre_paquete>
 
@@ -55,12 +58,13 @@ Este paso instala:
 
 #### 🔹 Opción CPU (portátiles o PCs sin GPU NVIDIA)
 ```bash
-conda install pytorch=1.13.1 cpuonly -c pytorch -c conda-forge
+conda install -y pytorch -c pytorch -c conda-forge
 ```
 
 #### 🔹 Opción GPU (PC con NVIDIA, recomendado en torre)
 ```bash
-conda install pytorch=1.13.1 pytorch-cuda=11.6 -c pytorch -c nvidia
+python -m pip install --upgrade pip
+python -m pip install --index-url https://download.pytorch.org/whl/cu121 torch torchvision torchaudio
 ```
 
 > ⚠️ Importante: no instales ambas variantes a la vez; usa **solo una** según tu hardware.
@@ -73,9 +77,12 @@ Comprueba que todo funciona:
 
 ```bash
 python - << 'PY'
-import torch, molforge, rdkit, pandas, matplotlib, seaborn, selfies, tqdm, sentencepiece, gdown, rich
+import torch, MolForge, rdkit, pandas, matplotlib, seaborn, selfies, tqdm, sentencepiece, gdown, rich
 print("env: OK")
+print("MolForge OK ->", MolForge.__file__)
 print("torch:", torch.__version__, "| cuda avail:", torch.cuda.is_available())
+if torch.cuda.is_available():
+    print("device:", torch.cuda.get_device_name(0))
 PY
 ```
 

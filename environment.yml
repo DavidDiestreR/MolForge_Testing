@@ -3,19 +3,27 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python=3.8
-  - rdkit=2022.09.3
-  - pip
+  # Python y ciencia de datos
+  - python=3.10
+  - rdkit
+  - numpy
+  - pandas
+  - matplotlib
+  - seaborn
+  - tqdm
   - ipykernel
   - jupyterlab
-  - pandas=1.5.2
-  - matplotlib=3.5.1
-  - seaborn=0.12.2
-  - tqdm=4.64.1
-  - numpy
+
+  # Herramientas necesarias para instalar paquetes desde GitHub
+  - git
+  - pip
+  - setuptools
+  - wheel
+
+  # Paquetes vía pip (incluye MolForge directamente desde GitHub)
   - pip:
-      - selfies==2.1.1
-      - sentencepiece==0.1.95
-      - gdown==4.2.0
+      - selfies
+      - sentencepiece
+      - gdown
       - rich
-      - git+https://github.com/knu-lcbc/MolForge.git
+      - "molforge @ git+https://github.com/knu-lcbc/MolForge.git"
