@@ -1,41 +1,32 @@
-# --- Environments ---
-env/
-.venv/
-.conda/
-*.egg-info/
-*.egg
-
-# Named conda env dirs if ever created locally (avoid committing)
-/molforge-cpu/
-/molforge-gpu/
-/MolForge_env/
-
-# --- Python cache ---
+# Byte-compiled / cache
 __pycache__/
 *.py[cod]
-*.pyo
+*.so
 
-# --- Jupyter ---
+# Jupyter
 .ipynb_checkpoints/
 
-# --- Build / dist ---
-build/
-dist/
-
-# --- OS files ---
+# OS files
 .DS_Store
-Thumbs.db
 
-# --- IDEs ---
-.vscode/
-.idea/
+# Environments
+.venv/
+.env/
+.envrc
+*.env
 
-# --- Large data / model artifacts (adjust as needed) ---
-*.csv
-*.tsv
-*.hdf5
-*.npz
-*.pkl
-*.ckpt
-*.pt
-*.pth
+# Data artifacts (keep .gitkeep)
+data/MolForge_input/*
+!data/MolForge_input/.gitkeep
+data/MolForge_output/*
+!data/MolForge_output/.gitkeep
+data/SMILES/*
+!data/SMILES/.gitkeep
+
+# Models (if you store big checkpoints outside git-lfs)
+data/models/*
+!data/models/.gitkeep
+
+# Logs
+logs/
+*.log

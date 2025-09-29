@@ -1,174 +1,182 @@
-# Proyecto de Evaluación con MolForge
+# MolForge Minimal Pipeline (Data layout personalizado)
 
-Este repositorio contiene código para evaluar moléculas generadas con **[MolForge](https://github.com/knu-lcbc/MolForge)** usando **RDKit** y distintos fingerprints.  
-Aquí encontrarás instrucciones claras para preparar el entorno y ejecutar el código, tanto en **CPU** como en **GPU (NVIDIA)**.
-
----
-
-## ⚙️ Requisitos previos
-
-- Tener instalado **[Conda](https://docs.conda.io/en/latest/miniconda.html)** (se recomienda Miniconda o Mambaforge).
-- Una vez instalado MiniConda por primera vez abrir AnacondaPrompt y escribir "conda init bash"
-- Conexión a internet para instalar los paquetes.
-- (Opcional) GPU NVIDIA con drivers actualizados, si deseas acelerar el cálculo.
+Este repo mínimo te permite:
+1) Convertir **SMILES → fingerprints** con RDKit.
+2) Ejecutar **MolForge** desde esos fingerprints y guardar la **salida**.
+3) Mantener **dos entornos** separados: `MolForge_env` (para MolForge) y `molforge-tools` (para RDKit/pandas).
 
 ---
 
-## 🖥️ Preparación del entorno
-
-En este repositorio incluimos un archivo `environment.yml` **general** con todas las dependencias comunes.  
-La única diferencia entre CPU y GPU está en cómo se instala **PyTorch**.
-
-### 1. Crear entorno base (común a todos)
-```bash
-# Clonar este repositorio
-git clone https://github.com/DavidDiestreR/MolForge_Testing.git
-cd MolForge_Testing
-
-# Crear el entorno base a partir de environment.yml
-conda env create -f environment.yml -n env
-conda activate env
-
-# Comprovar que estamos en el entorno
-python -c "import sys; print(sys.executable)"
-
-# Apagar el entorno
-conda deactivate
-
-# Eliminar un paquete del entorno
-conda remove <nombre_paquete>
-
-# eliminar el entorno ('env')
-conda remove -n env --all
+## 📁 Estructura de carpetas
 
 ```
-
-Este paso instala:
-- Python 3.8
-- RDKit
-- Pandas, Numpy, Matplotlib, Seaborn
-- TQDM, Rich
-- SELFIES, SentencePiece, Gdown
-- JupyterLab + ipykernel
-- MolForge (instalado directamente desde GitHub)
-
----
-
-### 2. Instalar PyTorch según tu máquina
-
-#### 🔹 Opción CPU (portátiles o PCs sin GPU NVIDIA)
-```bash
-conda install -y pytorch -c pytorch -c conda-forge
-```
-
-#### 🔹 Opción GPU (PC con NVIDIA, recomendado en torre)
-```bash
-python -m pip install --upgrade pip
-python -m pip install --index-url https://download.pytorch.org/whl/cu121 torch torchvision torchaudio
-```
-
-> ⚠️ Importante: no instales ambas variantes a la vez; usa **solo una** según tu hardware.
-
----
-
-## ✅ Verificación
-
-Comprueba que todo funciona:
-
-```bash
-python - << 'PY'
-import torch, MolForge, rdkit, pandas, matplotlib, seaborn, selfies, tqdm, sentencepiece, gdown, rich
-print("env: OK")
-print("MolForge OK ->", MolForge.__file__)
-print("torch:", torch.__version__, "| cuda avail:", torch.cuda.is_available())
-if torch.cuda.is_available():
-    print("device:", torch.cuda.get_device_name(0))
-PY
-```
-
-- En CPU debería mostrar `cuda avail: False`.  
-- En GPU debería mostrar `cuda avail: True`.
-
----
-
-## 🚀 Uso del proyecto
-
-### Opción A: fijar CPU (simple y universal)
-Si quieres que tu código funcione en cualquier PC sin preocuparte de GPUs:
-```python
-device = "cpu"
-```
-
-Esto garantiza compatibilidad máxima (ejecutará todo en CPU).  
-
----
-
-### Opción B: autodetección CPU/GPU (más flexible)
-Si prefieres que el código use GPU cuando esté disponible:
-```python
-import torch
-device = "cuda" if torch.cuda.is_available() else "cpu"
-print("Using device:", device)
-```
-
-Esto selecciona GPU automáticamente si existe; si no, usará CPU.  
-
-Puedes además permitir un **override manual** con una variable de entorno:
-```bash
-DEVICE=cpu python mi_script.py
-```
-
----
-
-## 🔄 Mantener el entorno actualizado entre varios PCs
-
-Es habitual que instales un paquete nuevo en tu portátil y quieras tenerlo también en tu PC de torre (o viceversa).  
-Para ello:
-
-1. Instala el paquete en tu entorno actual:
-   ```bash
-   conda install -c conda-forge scikit-learn
-   ```
-   (o `pip install paquete` si es vía pip).
-
-2. Edita tu `environment.yml` y añade el nuevo paquete en la sección `dependencies`.
-
-3. Haz commit y push:
-   ```bash
-   git add environment.yml
-   git commit -m "add scikit-learn"
-   git push
-   ```
-
-4. En el otro PC, actualiza el entorno:
-   ```bash
-   git pull
-   conda env update -n env -f environment.yml
-   ```
-
-👉 Esto instalará **solo los paquetes nuevos o actualizados**.  
-**No reinstalará PyTorch** porque en este `environment.yml` no está incluido: lo instalamos a mano (CPU o GPU) en cada máquina.
-
----
-
-## 📂 Estructura del repositorio
-
-```
-mi-proyecto/
-├─ src/                    # código propio (funciones, evaluaciones, utils…)
-├─ notebooks/              # experimentos Jupyter interactivos
-├─ environment.yml         # entorno general (común a CPU y GPU)
-├─ README.md               # este documento
+molforge-minimal/
+├─ envs/
+│  ├─ molforge/environment.yml      # usa el del repo oficial de MolForge (añade su línea pip)
+│  └─ tools/environment.yml         # RDKit + pandas
+├─ data/
+│  ├─ SMILES/                       # aquí pones tus archivos de entrada con SMILES
+│  ├─ MolForge_input/               # aquí guardaremos los fingerprints (input de MolForge)
+│  └─ MolForge_output/              # aquí se guardará la salida de MolForge
+├─ scripts/
+│  ├─ smiles_to_fps.py              # convierte SMILES → fingerprints (Morgan/MACCS/RDK/AtomPair/TT)
+│  └─ run_molforge.py               # ejecuta MolForge fila a fila y guarda resultados
 └─ .gitignore
 ```
 
----
-
-## 🔄 Buenas prácticas
-
-- Mantén **un solo `environment.yml` general** en el repo.  
-- Instala PyTorch aparte, según CPU o GPU, para no forzarlo en el YAML.  
-- Si en el futuro añades paquetes propios, actualiza el `environment.yml` y haz commit.  
-- En otros PCs, simplemente `git pull` + `conda env update` para sincronizar.
+> **Nota:** He ajustado los comandos y rutas para usar exactamente estas tres carpetas dentro de `data/`:
+> `SMILES/`, `MolForge_input/` y `MolForge_output/`.
 
 ---
+
+## 🧩 Requisitos previos
+
+- Tener **Conda o Mamba** instalado. (Recomiendo `mamba` por rapidez).
+- Conseguir el/los **checkpoints** del modelo de MolForge que vayas a usar (archivo `.pth`). Guárdalos donde prefieras; en los ejemplos uso `data/models/...` pero puedes usar otra ruta.
+- El **environment.yml de MolForge** (del repo oficial). En ese archivo, **añade** la línea `pip` que instala MolForge desde Git.
+
+---
+
+## ⚙️ Entornos: crear, activar, desactivar y actualizar
+
+### 1) Entorno de herramientas (RDKit/pandas) → `molforge-tools`
+
+**Crear (una sola vez):**
+```bash
+mamba env create -f envs/tools/environment.yml
+```
+
+**Activar:**
+```bash
+mamba activate molforge-tools
+```
+
+**Desactivar:**
+```bash
+mamba deactivate
+```
+
+**Actualizar (si editas `envs/tools/environment.yml`):**
+```bash
+mamba env update -f envs/tools/environment.yml --prune
+```
+
+### 2) Entorno de MolForge → `MolForge_env`
+
+1. Copia el `environment.yml` **oficial** del repo de MolForge dentro de `envs/molforge/environment.yml`.
+2. Dentro de ese `environment.yml`, en la sección `- pip:`, añade la línea para instalar MolForge desde Git, por ejemplo:
+   ```yaml
+   - "MolForge @ git+https://github.com/knu-lcbc/MolForge.git"
+   ```
+
+**Crear:**
+```bash
+mamba env create -f envs/molforge/environment.yml
+```
+
+**Activar / Desactivar:**
+```bash
+mamba activate MolForge_env
+mamba deactivate
+```
+
+**Actualizar:**
+```bash
+mamba env update -f envs/molforge/environment.yml --prune
+```
+
+**Comprobar que está bien instalado:**
+```bash
+mamba activate MolForge_env
+python -c "import torch, MolForge; print('torch cuda disponible?:', torch.cuda.is_available())"
+```
+
+---
+
+## 🔁 Flujo de trabajo paso a paso (para tontos y con ejemplos)
+
+### 0) Prepara un fichero con SMILES
+- Crea un CSV con una columna llamada **`smiles`** (y opcionalmente `id`), por ejemplo:
+  ```text
+  id,smiles
+  mol1,CCO
+  mol2,c1ccccc1
+  ```
+- Guárdalo como: `data/SMILES/molecules.csv`
+
+### A) **SMILES → Fingerprints** con RDKit (entorno `molforge-tools`)
+Activa el entorno de tools y ejecuta:
+
+```bash
+mamba activate molforge-tools
+
+python scripts/smiles_to_fps.py   --input data/SMILES/molecules.csv   --smiles-col smiles   --fp morgan --radius 2 --nBits 2048   --output data/MolForge_input/morgan_2048.parquet
+```
+
+- `--fp` admite: `morgan`, `maccs`, `rdkit`, `atompair`, `tt`.
+- Para **morgan**: `radius=2` ≈ **ECFP4** (esto suele ser lo que los modelos llaman ECFP4).
+- **Salida**: un archivo con columnas `id`, `smiles` y `fp_0000 ... fp_2047` (0/1).
+
+### B) **Fingerprints → MolForge** (entorno `MolForge_env`)
+Activa el entorno de MolForge y ejecuta:
+
+```bash
+mamba activate MolForge_env
+
+python scripts/run_molforge.py   --fps data/MolForge_input/morgan_2048.parquet   --checkpoint /ruta/a/tu/checkpoint.pth   --fp-name ECFP4   --model-type smiles   --decode greedy   --out data/MolForge_output/molforge_outputs.parquet
+```
+
+- `--fp-name` debe coincidir con lo que espera tu modelo (p. ej., `ECFP4`).
+- `--model-type` suele ser `smiles` (también soporta `selfies` si tu modelo lo usa).
+- `--decode`: `greedy` o `beam` (si el repositorio soporta beam).
+
+**¿Qué guarda?** Un fichero con columnas:
+- `id`: copiado del input (o índice si no había `id`),  
+- `molforge_smiles`: resultado devuelto por MolForge para ese fingerprint,  
+- `raw_stdout`: el texto completo que imprimió MolForge (por si quieres auditar).
+
+---
+
+## 🗃️ Gestión de archivos de datos (qué va en cada carpeta)
+
+- `data/SMILES/` → **tus entradas crudas** con SMILES (CSV/Parquet).  
+- `data/MolForge_input/` → **fingerprints** que genera `smiles_to_fps.py`.  
+- `data/MolForge_output/` → **resultados** de `run_molforge.py` (SMILES generados por MolForge).  
+
+> Sugerencia de nombres: incluye el tipo de FP y tamaño, p.ej. `morgan_2048.parquet`, y el modo de decodificación/salida, p.ej. `molforge_outputs.parquet`.
+
+---
+
+## 🧯 Problemas comunes y soluciones rápidas
+
+- **`ModuleNotFoundError: MolForge`**  
+  → No está instalado en `MolForge_env`. Revisa el `environment.yml` de MolForge y la línea pip. Luego:
+  ```bash
+  mamba env update -f envs/molforge/environment.yml --prune
+  ```
+
+- **`torch.cuda.is_available()` devuelve `False`**  
+  → Estás en CPU o tu PyTorch/CUDA no coincide con tu GPU/driver. Comprueba que el `environment.yml` de MolForge trae la build correcta de PyTorch para tu GPU.
+
+- **El script de MolForge va lento**  
+  → Este ejemplo lanza MolForge **una fila por vez** por simplicidad. Si necesitas velocidad, puedes adaptar `run_molforge.py` para agrupar entradas (si el repositorio de MolForge lo permite) o paralelizar.
+
+---
+
+## 🧪 Comandos rápidos (copy-paste)
+
+```bash
+# Crear entornos una vez
+mamba env create -f envs/tools/environment.yml
+mamba env create -f envs/molforge/environment.yml
+
+# Generar FP
+mamba activate molforge-tools
+python scripts/smiles_to_fps.py --input data/SMILES/molecules.csv --smiles-col smiles --fp morgan --radius 2 --nBits 2048 --output data/MolForge_input/morgan_2048.parquet
+
+# Ejecutar MolForge
+mamba activate MolForge_env
+python scripts/run_molforge.py --fps data/MolForge_input/morgan_2048.parquet --checkpoint /ruta/model.pth --fp-name ECFP4 --model-type smiles --decode greedy --out data/MolForge_output/molforge_outputs.parquet
+```
+
+¡Listo!
