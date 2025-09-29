@@ -11,17 +11,18 @@ Este repo mínimo te permite:
 ## 📁 Estructura de carpetas
 
 ```
-molforge-minimal/
+MolForge_Testing/
 ├─ envs/
-│  ├─ molforge/environment.yml      # pega aquí el environment oficial de MolForge y asegúrate de que instala PyTorch con CUDA
+│  ├─ molforge/environment.yml      # environment oficial de MolForge + instalador de MolForge
 │  └─ tools/environment.yml         # RDKit + pandas (ligero, sin torch)
 ├─ data/
-│  ├─ SMILES/                       # entradas con SMILES (CSV/Parquet)
+│  ├─ SMILES/                       # entradas con SMILES
 │  ├─ MolForge_input/               # fingerprints generados (input para MolForge)
 │  └─ MolForge_output/              # resultados de MolForge
 ├─ scripts/
-│  ├─ smiles_to_fps.py              # convierte SMILES → fingerprints (Morgan/MACCS/RDK/AtomPair/TT)
-│  └─ run_molforge.py               # ejecuta MolForge fila a fila y guarda resultados
+│  ├─ analysis/.gitkeep
+│  ├─ molforge/run_molforge.py      # ejecuta MolForge y guarda resultados
+│  └─ tools/smiles_to_fps.py        # convierte SMILES → fingerprints         
 └─ .gitignore
 ```
 
