@@ -94,16 +94,6 @@ conda activate MolForge_env
 export CUDA_VISIBLE_DEVICES=-1
 ```
 
-**Comprobaciones rápidas:**
-```bash
-python - << 'PY'
-import torch
-print("torch import OK. cuda available?:", torch.cuda.is_available())   # esperado: False
-from MolForge import main as _mf
-print("MolForge import OK (MolForge)")
-PY
-```
-
 ### B) Entorno **molforge-tools** (RDKit + pandas)
 
 Puedes crearlo y usarlo **en Windows** o **en Ubuntu** (mismo YAML).
