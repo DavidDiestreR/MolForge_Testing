@@ -24,11 +24,8 @@ from contextlib import redirect_stdout
 # Forzar CPU explícitamente (sin selector GPU/CPU)
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
-# Import robusto por si el módulo se llama MolForge o molforge
-try:
-    from MolForge import main as molforge_main
-except Exception:
-    from molforge import main as molforge_main
+# Import MolForge
+from MolForge import main as molforge_main
 
 
 def read_table(path: str):

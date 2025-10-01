@@ -1,17 +1,16 @@
 # MolForge Testing — **CPU-only** (Conda) · WSL + Windows
 
-Este repo está preparado para **inferir en CPU**, sin usar GPU/CUDA, respetando el `environment.yml` **original** de MolForge.
-La idea: ejecutar **MolForge** desde **Ubuntu (WSL)** con el entorno `MolForge_env` creado a partir del YAML oficial, y usar el entorno
-de utilidades (`molforge-tools`) con **Conda** (puede ser en Windows o en Ubuntu).
+Este repo está preparado para **inferir en CPU**, sin usar GPU/CUDA, respetando el `environment.yml` **oficial** de MolForge.  
+La idea: ejecutar **MolForge** desde **Ubuntu (WSL)** con el entorno `MolForge_env` creado a partir del YAML oficial, y usar el entorno de utilidades `molforge-tools` con **Conda** (puede ser en Windows o en Ubuntu).
 
 ---
 
-## Estructura
+## 📁 Estructura
 
 ```
 MolForge_Testing/
 ├─ envs/
-│  ├─ molforge/environment.yml      # environment oficial de MolForge (intacto)
+│  ├─ molforge/environment.yml      # environment oficial de MolForge
 │  └─ tools/environment.yml         # RDKit + pandas (ligero)
 ├─ data/
 │  ├─ SMILES/                       # entradas con SMILES
@@ -21,49 +20,52 @@ MolForge_Testing/
 │  ├─ smiles_to_fps.py              # convierte SMILES → fingerprints (CPU)
 │  └─ run_molforge.py               # ejecuta MolForge (CPU) fila a fila y guarda resultados
 ├─ notebooks/
-│  ├─ 01_smiles_to_fps.ipynb        # versión notebook con explicación pasito a pasito
-│  └─ 02_run_molforge_cpu.ipynb     # idem para inferencia con MolForge (CPU)
+│  ├─ 01_smiles_to_fps.ipynb        # guía paso a paso (CPU)
+│  └─ 02_run_molforge_cpu.ipynb     # guía paso a paso (CPU)
 └─ .gitignore
 ```
 
 ---
 
-## 1) Instalar Ubuntu (WSL) por primera vez (solo si aún no lo tienes)
+## 🧩 Requisitos
 
-### 1.1 Instalar WSL y Ubuntu
-Abre **PowerShell (Administrador)** y ejecuta:
+1) **WSL2 + Ubuntu 22.04** instalados en Windows (ver guía abajo).  
+2) **Conda/Miniconda** instalado dentro de **Ubuntu**.  
+3) **Environment oficial de MolForge**:
+   - Copia el `environment.yml` **del repo oficial de MolForge** a `envs/molforge/environment.yml`.
+   - **Añade en la sección `- pip:` la instalación del paquete**, por ejemplo:
+     ```yaml
+     - "MolForge @ git+https://github.com/knu-lcbc/MolForge.git"
+     ```
+   - Este proyecto asume **CPU** (no CUDA).
+
+---
+
+## 🐧 Instalar Ubuntu (WSL) por primera vez
+
+**En PowerShell (Administrador):**
 ```powershell
 wsl --install -d Ubuntu-22.04
-```
-Reinicia si te lo pide. Abre **Ubuntu** desde el menú Inicio y crea usuario/contraseña.
-
-### 1.2 (Opcional) Actualizar WSL
-```powershell
 wsl --update
+wsl -l -v      # debe mostrar Ubuntu con VERSION 2
 ```
 
-### 1.3 Confirmar que estás en WSL2
-```powershell
-wsl -l -v
-```
-Debe poner: `Ubuntu ... VERSION 2`.
+**Rutas:**
+- Windows/PowerShell → `D:\MolForge_Testing`  
+- Ubuntu/WSL → `/mnt/d/MolForge_Testing`
 
-### 1.4 Diferencias de rutas
-- En **Windows/PowerShell**: `D:\MolForge_Testing`
-- En **Ubuntu/WSL**: `/mnt/d/MolForge_Testing`
-
-Para abrir Ubuntu ya dentro del proyecto:
+Abrir Ubuntu ya dentro del proyecto:
 ```powershell
 wsl -d Ubuntu --cd /mnt/d/MolForge_Testing
 ```
 
 ---
 
-## 2) Instalar **Conda en Ubuntu** (si aún no la tienes)
+## 📦 Instalar Conda en Ubuntu (WSL)
 
-En la terminal de **Ubuntu**:
+En la **terminal de Ubuntu**:
 ```bash
-# instalación no interactiva rápida
+# instalación rápida (no interactiva)
 curl -fsSL -o /tmp/miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 bash /tmp/miniconda.sh -b -p "$HOME/miniconda3"
 "$HOME/miniconda3/bin/conda" init bash
@@ -75,10 +77,11 @@ conda --version
 
 ---
 
-## 3) Entornos
+## 🛠️ Entornos
 
-### 3.1 Entorno de **MolForge** (Ubuntu/WSL, CPU)
-> Usaremos el `environment.yml` **oficial** de MolForge **sin modificarlo**.
+### A) Entorno **MolForge** (Ubuntu/WSL, CPU)
+
+> Usaremos el `environment.yml` oficial **intacto**, solo añadiendo la línea `pip` para instalar MolForge (ver Requisitos).
 
 ```bash
 # dentro de Ubuntu, en la carpeta del proyecto
@@ -87,19 +90,27 @@ cd /mnt/d/MolForge_Testing
 conda env create -f envs/molforge/environment.yml -n MolForge_env
 conda activate MolForge_env
 
-# Forzar CPU (sin GPU) en esta sesión — el script y el notebook también lo hacen
+# Forzar modo CPU en esta sesión
 export CUDA_VISIBLE_DEVICES=-1
+```
 
-# verificación rápida
+**Comprobaciones rápidas:**
+```bash
 python - << 'PY'
 import torch
-print("cuda available?:", torch.cuda.is_available())  # debería imprimir False
-print("device:", "cpu")
+print("torch import OK. cuda available?:", torch.cuda.is_available())   # esperado: False
+try:
+    from MolForge import main as _mf
+    print("MolForge import OK (MolForge)")
+except Exception:
+    from molforge import main as _mf
+    print("MolForge import OK (molforge)")
 PY
 ```
 
-### 3.2 Entorno de **utilidades (RDKit)** — `molforge-tools`
-Puedes crearlo y usarlo **en Windows** (Miniconda para Windows) o **en Ubuntu**. El YAML es el mismo.
+### B) Entorno **molforge-tools** (RDKit + pandas)
+
+Puedes crearlo y usarlo **en Windows** o **en Ubuntu** (mismo YAML).
 
 **Windows (PowerShell):**
 ```powershell
@@ -114,37 +125,93 @@ conda env create -f envs/tools/environment.yml
 conda activate molforge-tools
 ```
 
+**Actualizar el entorno de tools cuando cambies el YAML:**
+```bash
+conda env update -f envs/tools/environment.yml --prune
+```
+
 ---
 
-## 4) Flujo de trabajo (CPU)
+## 🔁 Flujo de trabajo (solo CPU)
 
-### 4.1 SMILES → Fingerprints (RDKit)
-**Opción A: Notebook (recomendado para entender el proceso)**
-- Abre `notebooks/01_smiles_to_fps.ipynb` y sigue las celdas.
-- Parámetros: `--fp` (`morgan|maccs|rdkit|atompair|tt`), `radius`, `nBits`, etc.
-- Entrada: `data/SMILES/*.csv` o `.parquet` con columna `smiles` (y opcional `id`).
-- Salida: `data/MolForge_input/*.parquet` (o `.csv`).
+### 1) SMILES → Fingerprints (RDKit)
 
-**Opción B: Script CLI**
+**Opción Notebook (recomendada la primera vez):**  
+Abre `notebooks/01_smiles_to_fps.ipynb` y sigue las celdas.  
+Entrada: CSV/Parquet con columna `smiles` (opcional `id`).  
+Salida: fichero en `data/MolForge_input/` con columnas `id`, `smiles`, `fp_0000...`.
+
+**Opción Script (rápido/automatizable):**
 ```bash
 conda activate molforge-tools
 python scripts/smiles_to_fps.py   --input data/SMILES/molecules.csv   --smiles-col smiles   --fp morgan --radius 2 --nBits 2048   --output data/MolForge_input/morgan_2048.parquet
 ```
 
-### 4.2 Fingerprints → MolForge (CPU)
-**Opción A: Notebook**
-- Abre `notebooks/02_run_molforge_cpu.ipynb`, indica:
-  - `fps_path`: fichero en `data/MolForge_input/`
-  - `checkpoint_path`: ruta al `.pth` del modelo entrenado
-  - `fp_name`: p. ej. `ECFP4`
-  - `model_type`: `smiles` (o `selfies` si aplica)
-  - `decode`: `greedy` o `beam` (si el repo lo soporta)
-- Ejecuta las celdas y generará `data/MolForge_output/molforge_outputs.parquet`.
+### 2) Fingerprints → MolForge (CPU)
 
-**Opción B: Script CLI (CPU, sin selector GPU)**
+**Opción Notebook:**  
+Abre `notebooks/02_run_molforge_cpu.ipynb` y define:
+- `fps_path` → fichero de `data/MolForge_input/`
+- `checkpoint_path` → ruta a tu `.pth`
+- `fp_name` → p. ej. `ECFP4`
+- `model_type` → `smiles` (o `selfies`)
+- `decode` → `greedy` (o `beam` si tu repo lo soporta)
+
+**Opción Script (CPU):**
 ```bash
 conda activate MolForge_env
 export CUDA_VISIBLE_DEVICES=-1
 
-python scripts/run_molforge.py   --fps data/MolForge_input/morgan_2048.parquet   --checkpoint /ruta/a/tu/checkpoint.pth   --fp-name ECFP4   --model-type smiles   --decode greedy   --out data/MolForge_output/molforge_outputs.parquet
+python scripts/run_molforge.py   --fps data/MolForge_Input/morgan_2048.parquet   --checkpoint /ruta/a/tu/checkpoint.pth   --fp-name ECFP4   --model-type smiles   --decode greedy   --out data/MolForge_output/molforge_outputs.parquet
 ```
+
+---
+
+## ✅ Comprobaciones de instalación
+
+**MolForge_env (Ubuntu/WSL):**
+```bash
+conda activate MolForge_env
+export CUDA_VISIBLE_DEVICES=-1
+python - << 'PY'
+import torch
+print("cuda available?:", torch.cuda.is_available())  # esperado False
+from MolForge import main as _mf
+print("MolForge import OK (MolForge)")
+PY
+```
+
+**molforge-tools (Windows o Ubuntu):**
+```bash
+conda activate molforge-tools
+python - << 'PY'
+import pandas as pd
+print("pandas:", pd.__version__)
+from rdkit import Chem
+print("rdkit MolFromSmiles test:", Chem.MolFromSmiles("CCO") is not None)
+PY
+```
+
+---
+
+## 📂 Gestión de datos
+
+- `data/SMILES/` → entradas con SMILES (`.csv`/`.parquet`).  
+- `data/MolForge_input/` → fingerprints generados (input a MolForge).  
+- `data/MolForge_output/` → resultados de MolForge (SMILES generados, logs).  
+
+**Sugerencia de nombres:** incluye el tipo/size del FP (`morgan_2048.parquet`) y fecha/modo en la salida (`molforge_outputs_YYYYMMDD.parquet`).
+
+---
+
+## 🔄 Actualizar entornos
+
+- **tools (Windows o Ubuntu):**
+  ```bash
+  conda env update -f envs/tools/environment.yml --prune
+  ```
+- **MolForge_env (Ubuntu):** si cambia el YAML oficial, lo más limpio es recrear:
+  ```bash
+  conda env remove -n MolForge_env
+  conda env create -f envs/molforge/environment.yml -n MolForge_env
+  ```
