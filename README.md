@@ -148,23 +148,3 @@ export CUDA_VISIBLE_DEVICES=-1
 
 python scripts/run_molforge.py   --fps data/MolForge_input/morgan_2048.parquet   --checkpoint /ruta/a/tu/checkpoint.pth   --fp-name ECFP4   --model-type smiles   --decode greedy   --out data/MolForge_output/molforge_outputs.parquet
 ```
-
----
-
-## 5) Consejos de uso (WSL vs Windows)
-
-- Trabajar en `/mnt/d/...` desde Ubuntu es cómodo, pero **algo más lento** en I/O que trabajar dentro de `~/` (Linux). Para repos grandes, puedes clonar también en `~/proyectos/`.
-- Los notebooks puedes abrirlos con **VSCode + Remote WSL** o con **Jupyter** dentro de Ubuntu:
-  ```bash
-  pip install jupyterlab
-  jupyter lab
-  ```
-  y abres `http://127.0.0.1:8888` desde Windows.
-
----
-
-## 6) Problemas comunes
-
-- **`ModuleNotFoundError: MolForge/molforge`** → Asegúrate de haber instalado MolForge según su repo (el `environment.yml` oficial suele añadir la instalación por `pip`).  
-- **MolForge lento** → Es normal en CPU. Para lotes grandes, considera paralelizar o ajustar batch si el repo lo permite.  
-- **Rutas** → En Windows `D:\MolForge_Testing\...`, en Ubuntu `/mnt/d/MolForge_Testing/...`.
