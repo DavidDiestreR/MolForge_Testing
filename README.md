@@ -99,12 +99,8 @@ export CUDA_VISIBLE_DEVICES=-1
 python - << 'PY'
 import torch
 print("torch import OK. cuda available?:", torch.cuda.is_available())   # esperado: False
-try:
-    from MolForge import main as _mf
-    print("MolForge import OK (MolForge)")
-except Exception:
-    from molforge import main as _mf
-    print("MolForge import OK (molforge)")
+from MolForge import main as _mf
+print("MolForge import OK (MolForge)")
 PY
 ```
 
