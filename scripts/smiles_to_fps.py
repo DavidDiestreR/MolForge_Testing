@@ -1,17 +1,14 @@
 #!/usr/bin/env python
 """
-Convert SMILES → fingerprints (RDKit). Minimal.
+SMILES → fingerprints (CPU, RDKit).
 
-Ejemplo:
+Uso:
+  conda activate molforge-tools
   python scripts/smiles_to_fps.py \
     --input data/SMILES/molecules.csv \
     --smiles-col smiles \
     --fp morgan --radius 2 --nBits 2048 \
     --output data/MolForge_input/morgan_2048.parquet
-
-Admite: morgan, maccs, rdkit, atompair, tt
-- morgan(radius=2) ≈ ECFP4
-- maccs = 167 bits fijos (ignora nBits)
 """
 
 import argparse

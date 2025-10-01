@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 """
-Ejecuta MolForge por fila de un fichero de fingerprints y guarda los SMILES predichos.
+Ejecuta MolForge en **CPU** por cada fila de un fichero de fingerprints y guarda los SMILES predichos.
 
-Ejemplo:
+Uso:
+  conda activate MolForge_env
+  export CUDA_VISIBLE_DEVICES=-1
   python scripts/run_molforge.py \
     --fps data/MolForge_input/morgan_2048.parquet \
     --checkpoint /ruta/model.pth \
@@ -19,14 +21,14 @@ import io
 import pandas as pd
 from contextlib import redirect_stdout
 
+# Forzar CPU explícitamente (sin selector GPU/CPU)
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+
+# Import robusto por si el módulo se llama MolForge o molforge
 try:
-    from MolForge import main as molforge_main  # del repo oficial
-except Exception as e:
-    raise SystemExit(
-        "MolForge no está instalado en este entorno. "
-        "Instálalo en MolForge_env (pip) o añade la línea pip al environment.yml.\n"
-        f"Detalle: {e}"
-    )
+    from MolForge import main as molforge_main
+except Exception:
+    from molforge import main as molforge_main
 
 
 def read_table(path: str):

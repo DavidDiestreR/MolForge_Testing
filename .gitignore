@@ -8,6 +8,7 @@ __pycache__/
 
 # OS files
 .DS_Store
+Thumbs.db
 
 # Environments
 .venv/
@@ -22,10 +23,6 @@ data/MolForge_output/*
 !data/MolForge_output/.gitkeep
 data/SMILES/*
 !data/SMILES/.gitkeep
-
-# Models (if you store big checkpoints outside git-lfs)
-data/models/*
-!data/models/.gitkeep
 
 # Logs
 logs/
