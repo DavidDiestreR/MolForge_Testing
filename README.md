@@ -84,7 +84,7 @@ conda --version
 > Usaremos el `environment.yml` oficial **intacto**, solo añadiendo la línea `pip` para instalar MolForge (ver Requisitos).
 
 ```bash
-# dentro de Ubuntu, en la carpeta del proyecto
+# dentro de Ubuntu, entrar en la carpeta del proyecto
 cd /mnt/d/MolForge_Testing
 
 conda env create -f envs/molforge/environment.yml -n MolForge_env
