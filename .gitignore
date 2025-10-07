@@ -1,29 +1,67 @@
-# Byte-compiled / cache
+# ===============================
+# Git ignore for MolForge project
+# ===============================
+#
+# Objetivo:
+# - Guardar TODOS los datos del proyecto por defecto (incluyendo data/ y outputs).
+# - No versionar los pesos/checkpoints en saved_models/ (solo .gitkeep como marcador).
+# - Ignorar artefactos temporales de Python/Jupyter, entornos, ficheros de editor/SO y builds.
+#
+# --- Python / general ---
 __pycache__/
 *.py[cod]
+*$py.class
 *.so
+*.pyd
+*.pyo
+*.py.rej
 
-# Jupyter
+# --- Jupyter ---
 .ipynb_checkpoints/
 
-# OS files
+# --- Entornos / paquetes ---
+.venv/
+venv/
+env/
+envs/
+.env
+.conda/
+conda-meta/
+pip-wheel-metadata/
+*.egg-info/
+.eggs/
+
+# --- Editores / SO ---
+.vscode/
+.idea/
+*.code-workspace
 .DS_Store
 Thumbs.db
 
-# Environments
-.venv/
-.env/
-.envrc
-*.env
+# --- Build / distribución ---
+build/
+dist/
 
-# Data artifacts (keep .gitkeep)
-data/MolForge_input/*
-!data/MolForge_input/.gitkeep
-data/MolForge_output/*
-!data/MolForge_output/.gitkeep
-data/SMILES/*
-!data/SMILES/.gitkeep
-
-# Logs
-logs/
+# --- Tests / cobertura / tmp ---
+.pytest_cache/
+.coverage
+htmlcov/
 *.log
+*.tmp
+*.cache/
+.cache/
+
+# --- ML / tracking típicos ---
+wandb/
+mlruns/
+runs/
+tensorboard/
+.checkpoints/
+
+# --- Carpeta de modelos: existe en el repo pero sin pesos ---
+saved_models/*
+!saved_models/.gitkeep
+
+# --- Whitelists útiles ---
+# Asegura que los environment.yml se versionan siempre, incluso si una regla general los afectara.
+!**/environment.yml
