@@ -188,6 +188,19 @@ pip install pandas pyarrow tqdm "rdkit-pypi>=2022.9.5"
 
 ---
 
+## 🧠 Checkpoints y carpeta `saved_models`
+
+La carpeta `saved_models/` está **vacía** en este repositorio porque los **checkpoints** de MolForge son demasiado pesados para versionarlos en GitHub.
+
+Para ejecutar usar los checkpoints del modelo ya entrenado, descárgalos del repo oficial de MolForge y colócalos en `saved_models/` (manteniendo los nombres de archivo):
+
+- 🔹 [**top-performing**](https://drive.google.com/uc?id=1zl6HBdwYsnA4JcnOi1o6OmcrRDB5iySK) — modelos con mejor rendimiento (recomendado).
+- 🔹 [**all the other models**](https://drive.google.com/uc?id=1jCtbc9lMacCyiZ3iZFEtFgOfOQYtWEuD) — el resto de modelos disponibles.
+
+> Tras descargar, descomprime y verifica que el checkpoint que usarás existe en `saved_models/`.
+
+---
+
 ## 🔁 Flujo de trabajo (solo CPU)
 
 ### 1) SMILES → Fingerprints (RDKit)
