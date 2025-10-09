@@ -1,41 +1,67 @@
-# --- Environments ---
-env/
-.venv/
-.conda/
-*.egg-info/
-*.egg
-
-# Named conda env dirs if ever created locally (avoid committing)
-/molforge-cpu/
-/molforge-gpu/
-/MolForge_env/
-
-# --- Python cache ---
+# ===============================
+# Git ignore for MolForge project
+# ===============================
+#
+# Objetivo:
+# - Guardar TODOS los datos del proyecto por defecto (incluyendo data/ y outputs).
+# - No versionar los pesos/checkpoints en saved_models/ (solo .gitkeep como marcador).
+# - Ignorar artefactos temporales de Python/Jupyter, entornos, ficheros de editor/SO y builds.
+#
+# --- Python / general ---
 __pycache__/
 *.py[cod]
+*$py.class
+*.so
+*.pyd
 *.pyo
+*.py.rej
 
 # --- Jupyter ---
 .ipynb_checkpoints/
 
-# --- Build / dist ---
-build/
-dist/
+# --- Entornos / paquetes ---
+.venv/
+venv/
+env/
+envs/
+.env
+.conda/
+conda-meta/
+pip-wheel-metadata/
+*.egg-info/
+.eggs/
 
-# --- OS files ---
+# --- Editores / SO ---
+.vscode/
+.idea/
+*.code-workspace
 .DS_Store
 Thumbs.db
 
-# --- IDEs ---
-.vscode/
-.idea/
+# --- Build / distribución ---
+build/
+dist/
 
-# --- Large data / model artifacts (adjust as needed) ---
-*.csv
-*.tsv
-*.hdf5
-*.npz
-*.pkl
-*.ckpt
-*.pt
-*.pth
+# --- Tests / cobertura / tmp ---
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+*.tmp
+*.cache/
+.cache/
+
+# --- ML / tracking típicos ---
+wandb/
+mlruns/
+runs/
+tensorboard/
+.checkpoints/
+
+# --- Carpeta de modelos: existe en el repo pero sin pesos ---
+saved_models/*
+!saved_models/.gitkeep
+
+# --- Whitelists útiles ---
+# Asegura que los environment.yml se versionan siempre, incluso si una regla general los afectara.
+!**/environment.yml

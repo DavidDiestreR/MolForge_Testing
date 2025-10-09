@@ -1,0 +1,9 @@
+name: molforge-tools
+channels:
+  - conda-forge
+dependencies:
+  - python>=3.10
+  - rdkit
+  - pandas
+  - pyarrow
+  - numpy
