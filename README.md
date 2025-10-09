@@ -1,8 +1,7 @@
-# MolForge Testing — **CPU-only** (Conda **o** venv) · WSL + Windows + Linux (Lab)
+# MolForge Testing — **CPU-only** (Conda - en PC **o** venv - en lab) · WSL + Windows (PC) o Linux (Lab)
 
 Este repo está preparado para **inferir en CPU**, sin usar GPU/CUDA, respetando el `environment.yml` **oficial** de MolForge.  
-La idea: ejecutar **MolForge** desde **Ubuntu (WSL)** con el entorno `MolForge_env` creado a partir del YAML oficial, y usar el entorno de utilidades `molforge-tools`.  
-**Añadido:** alternativa con **`venv`** (sin Conda) para quien lo prefiera.
+La idea: ejecutar **MolForge** desde **Ubuntu (WSL)** con el entorno `MolForge_env` creado a partir del YAML oficial, y usar el entorno de utilidades `molforge-tools`.
 
 ---
 
@@ -16,13 +15,15 @@ MolForge_Testing/
 ├─ data/
 │  ├─ SMILES/                       # entradas con SMILES
 │  ├─ MolForge_input/               # fingerprints generados (input para MolForge)
+│  ├─ sp/                           # vocabulari (importat del repo de MolForge)
 │  └─ MolForge_output/              # resultados de MolForge
+├─ saved_models/                    # Checkpoints del repo de MolForge (descarregar a banda)
 ├─ scripts/
 │  ├─ smiles_to_fps.py              # convierte SMILES → fingerprints (CPU)
-│  └─ run_molforge.py               # ejecuta MolForge (CPU) fila a fila y guarda resultados
+│  └─ run_molforge.py               # ejecuta MolForge (CPU) fila a fila y guarda resultats
 ├─ notebooks/
-│  ├─ 01_smiles_to_fps.ipynb        # guía paso a paso (CPU)
-│  └─ 02_run_molforge_cpu.ipynb     # guía paso a paso (CPU)
+│  ├─ 01_smiles_to_fps.ipynb
+│  └─ 02_run_molforge_cpu.ipynb
 └─ .gitignore
 ```
 
@@ -30,9 +31,9 @@ MolForge_Testing/
 
 ## 🧩 Requisitos
 
-1) **WSL2 + Ubuntu 22.04** instalados en Windows (ver guía abajo).  
+1) **WSL2 + Ubuntu 22.04** instalados en Windows (ver guía abajo en caso de estar en PC Windows).  
 2) **Conda/Miniconda** instalado dentro de **Ubuntu** (si usas la opción Conda).  
-3) **Environment oficial de MolForge**:
+3) **Environment oficial de MolForge**: (No hace falta hacerlo porque ya está importado en este repositorio)
    - Copia el `environment.yml` **del repo oficial de MolForge** a `envs/molforge/environment.yml`.
    - **Añade en la sección `- pip:` la instalación del paquete**, por ejemplo:
      ```yaml
@@ -53,8 +54,8 @@ wsl --update
 wsl -l -v      # debe mostrar Ubuntu con VERSION 2
 ```
 
-**Rutas del proyecto según máquina:**  
-- **Tu PC (WSL):** `D:\MolForge_Testing` (Windows) ↔ `/mnt/d/MolForge_Testing` (Ubuntu)  
+**Rutas del proyecto según máquina (adaptar a la ruta personal de cada uno):**  
+- **PC (WSL):** `D:\MolForge_Testing` (Windows) ↔ `/mnt/d/MolForge_Testing` (Ubuntu)  
 - **Laboratorio (Linux):** `/export/home/ddiestre/MolForge_Testing`
 
 Abrir Ubuntu ya dentro del proyecto:
