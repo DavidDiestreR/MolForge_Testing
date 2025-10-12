@@ -1,7 +1,8 @@
-# MolForge Testing — **CPU-only** (Conda - en PC **o** venv - en lab) · WSL + Windows (PC) o Linux (Lab)
+# MolForge Testing — **CPU** (Conda) · WSL + Windows (PC) o Linux (Lab)
 
-Este repo está preparado para **inferir en CPU**, sin usar GPU/CUDA, respetando el `environment.yml` **oficial** de MolForge.  
-La idea: ejecutar **MolForge** desde **Ubuntu (WSL)** con el entorno `MolForge_env` creado a partir del YAML oficial, y usar el entorno de utilidades `molforge-tools`.
+Este repositorio está configurado para ejecutar **MolForge exclusivamente en CPU** usando entornos **Conda**.  
+El entorno oficial de MolForge (`MolForge_env`) está basado en el `environment.yml` original del proyecto y está pensado **solo para inferencia en CPU**.  
+Las tareas de **preprocesado** (como convertir SMILES → fingerprints) se realizan con el entorno auxiliar `molforge-tools`. 
 
 ---
 
@@ -19,8 +20,8 @@ MolForge_Testing/
 │  └─ MolForge_output/              # resultados de MolForge
 ├─ saved_models/                    # Checkpoints del repo de MolForge (descarregar a banda)
 ├─ scripts/
-│  ├─ smiles_to_fps.py              # convierte SMILES → fingerprints (CPU)
-│  └─ run_molforge.py               # ejecuta MolForge (CPU) fila a fila y guarda resultats
+│  ├─ smiles_to_fps.py              # convierte SMILES → fingerprints
+│  └─ run_molforge.py               # ejecuta MolForge fila a fila y guarda resultats
 ├─ notebooks/
 │  ├─ 01_smiles_to_fps.ipynb
 │  └─ 02_run_molforge_cpu.ipynb
@@ -32,17 +33,13 @@ MolForge_Testing/
 ## 🧩 Requisitos
 
 1) **WSL2 + Ubuntu 22.04** instalados en Windows (ver guía abajo en caso de estar en PC Windows).  
-2) **Conda/Miniconda** instalado dentro de **Ubuntu** (si usas la opción Conda).  
+2) **Conda/Miniconda** instalado dentro de **Ubuntu**.  
 3) **Environment oficial de MolForge**: (No hace falta hacerlo porque ya está importado en este repositorio)
    - Copia el `environment.yml` **del repo oficial de MolForge** a `envs/molforge/environment.yml`.
    - **Añade en la sección `- pip:` la instalación del paquete**, por ejemplo:
      ```yaml
      - "MolForge @ git+https://github.com/knu-lcbc/MolForge.git"
      ```
-   - Este proyecto asume **CPU** (no CUDA).
-
-> **Alternativa sin Conda:** puedes usar **`venv`** (ver más abajo) tanto para el entorno de MolForge como para las utilidades.
-
 ---
 
 ## 🐧 Instalar Ubuntu (WSL) por primera vez
@@ -88,9 +85,9 @@ conda --version
 
 ## 🛠️ Entornos (Conda)
 
-### A) Entorno **MolForge** (Ubuntu/WSL, CPU)
+### A) Entorno **MolForge**
 
-> Usaremos el `environment.yml` oficial **intacto**, solo añadiendo la línea `pip` para instalar MolForge (ver Requisitos).
+> Usaremos el `environment.yml` oficial (incluye PyTorch y, si se desea, soporte CUDA).
 
 ```bash
 # PC (WSL) — o adapta a la ruta del Lab si trabajas allí
@@ -99,9 +96,6 @@ cd /mnt/d/MolForge_Testing          # PC (WSL)
 
 conda env create -f envs/molforge/environment.yml -n MolForge_env
 conda activate MolForge_env
-
-# Forzar modo CPU en esta sesión
-export CUDA_VISIBLE_DEVICES=-1
 ```
 
 ### B) Entorno **molforge-tools** (RDKit + pandas)
@@ -133,75 +127,20 @@ conda env update -f envs/tools/environment.yml --prune
 
 ---
 
-## 🛠️ Entornos (venv) — Alternativa sin Conda
-
-> Útil si prefieres `pip` puro o no puedes usar Conda.  
-> **Nota RDKit:** en `pip` suele usarse el wheel `rdkit-pypi` (no oficial conda-forge). Si RDKit te da problemas, usa la opción Conda.
-
-### A) Entorno **MolForge** con venv (CPU)
-
-```bash
-# PC (WSL):
-cd /mnt/d/MolForge_Testing
-# Laboratorio (Linux):
-# cd /export/home/ddiestre/MolForge_Testing
-
-# Crear y activar el venv (nombre sugerido: .venv_mf)
-python3 -m venv .venv_mf
-source .venv_mf/bin/activate
-
-# Actualizar pip y herramientas básicas
-python -m pip install --upgrade pip setuptools wheel
-
-# Instalar PyTorch CPU (ajusta si tu sistema requiere índice específico)
-pip install --index-url https://download.pytorch.org/whl/cpu torch torchvision torchaudio
-
-# Instalar MolForge (desde el repo oficial)
-pip install "MolForge @ git+https://github.com/knu-lcbc/MolForge.git"
-
-# Dependencias comunes que suelen requerirse
-pip install pandas pyarrow tqdm sentencepiece selfies rich
-
-# Forzar modo CPU
-export CUDA_VISIBLE_DEVICES=-1
-```
-
-### B) Entorno **molforge-tools** con venv
-
-```bash
-# PC (WSL):
-cd /mnt/d/MolForge_Testing
-# Laboratorio (Linux):
-# cd /export/home/ddiestre/MolForge_Testing
-
-# Crear y activar el venv (nombre sugerido: .venv_tools)
-python3 -m venv .venv_tools
-source .venv_tools/bin/activate
-
-python -m pip install --upgrade pip setuptools wheel
-
-# Paquetes mínimos de utilidades
-pip install pandas pyarrow tqdm "rdkit-pypi>=2022.9.5"
-```
-
-> Para cambiar de un entorno a otro: `deactivate` y vuelve a `conda activate ...` o `source .venv_.../bin/activate` según corresponda.
-
----
-
 ## 🧠 Checkpoints y carpeta `saved_models`
 
 La carpeta `saved_models/` está **vacía** en este repositorio porque los **checkpoints** de MolForge son demasiado pesados para versionarlos en GitHub.
 
-Para ejecutar usar los checkpoints del modelo ya entrenado, descárgalos del repo oficial de MolForge y colócalos en `saved_models/` (manteniendo los nombres de archivo):
+Para usar los checkpoints del modelo ya entrenado, descárgalos del repo oficial de MolForge y colócalos en `saved_models/` (manteniendo los nombres de archivo):
 
-- 🔹 [**top-performing**](https://drive.google.com/uc?id=1zl6HBdwYsnA4JcnOi1o6OmcrRDB5iySK) — modelos con mejor rendimiento (recomendado).
-- 🔹 [**all the other models**](https://drive.google.com/uc?id=1jCtbc9lMacCyiZ3iZFEtFgOfOQYtWEuD) — el resto de modelos disponibles.
+- [**top-performing**](https://drive.google.com/uc?id=1zl6HBdwYsnA4JcnOi1o6OmcrRDB5iySK) — modelos con mejor rendimiento (recomendado).
+- [**all the other models**](https://drive.google.com/uc?id=1jCtbc9lMacCyiZ3iZFEtFgOfOQYtWEuD) — el resto de modelos disponibles.
 
 > Tras descargar, descomprime y verifica que el checkpoint que usarás existe en `saved_models/`.
 
 ---
 
-## 🔁 Flujo de trabajo (solo CPU)
+## 🔁 Flujo de trabajo
 
 ### 1) SMILES → Fingerprints (RDKit)
 
@@ -212,9 +151,7 @@ Salida: fichero en `data/MolForge_input/` con columnas `id`, `smiles`, `fp_0000.
 
 **Opción Script (rápido/automatizable):**
 ```bash
-# Activa el entorno de tools (Conda o venv)
-# conda activate molforge-tools
-# source .venv_tools/bin/activate
+conda activate molforge-tools
 
 python scripts/smiles_to_fps.py \
   --input data/SMILES/molecules.csv \
@@ -223,7 +160,7 @@ python scripts/smiles_to_fps.py \
   --output data/MolForge_input/morgan_2048.parquet
 ```
 
-### 2) Fingerprints → MolForge (CPU)
+### 2) Fingerprints → MolForge
 
 **Opción Notebook:**  
 Abre `notebooks/02_run_molforge_cpu.ipynb` y define:
@@ -233,12 +170,9 @@ Abre `notebooks/02_run_molforge_cpu.ipynb` y define:
 - `model_type` → `smiles` (o `selfies`)
 - `decode` → `greedy` (o `beam` si tu repo lo soporta)
 
-**Opción Script (CPU):**
+**Opción Script:**
 ```bash
-# Activa el entorno de MolForge (Conda o venv)
-# conda activate MolForge_env
-# source .venv_mf/bin/activate
-export CUDA_VISIBLE_DEVICES=-1
+conda activate MolForge_env
 
 python scripts/run_molforge.py \
   --fps data/MolForge_input/morgan_2048.parquet \
@@ -253,21 +187,23 @@ python scripts/run_molforge.py \
 
 ## ✅ Comprobaciones de instalación
 
-**MolForge (Conda o venv):**
+**MolForge:**
 ```bash
-# conda activate MolForge_env   # o: source .venv_mf/bin/activate
-export CUDA_VISIBLE_DEVICES=-1
+conda activate MolForge_env
 python - << 'PY'
 import torch
-print("cuda available?:", torch.cuda.is_available())  # esperado False
+print("torch:", torch.__version__)
+print("build CUDA:", torch.version.cuda)            # None => build CPU-only
+print("cuda available?:", torch.cuda.is_available())
+print("selected device:", "cuda" if torch.cuda.is_available() else "cpu")
 from MolForge import main as _mf
 print("MolForge import OK (MolForge)")
 PY
 ```
 
-**molforge-tools (Conda o venv):**
+**molforge-tools:**
 ```bash
-# conda activate molforge-tools  # o: source .venv_tools/bin/activate
+conda activate molforge-tools
 python - << 'PY'
 import pandas as pd
 print("pandas:", pd.__version__)
@@ -284,10 +220,8 @@ PY
 ## 📂 Gestión de datos
 
 - `data/SMILES/` → entradas con SMILES (`.csv`/`.parquet`).  
-- `data/MolForge_input/` → fingerprints generados (input a MolForge).  
+- `data/MolForge_Input/` → fingerprints generados (input a MolForge).  
 - `data/MolForge_output/` → resultados de MolForge (SMILES generados, logs).  
-
-**Sugerencia de nombres:** incluye el tipo/size del FP (`morgan_2048.parquet`) y fecha/modo en la salida (`molforge_outputs_YYYYMMDD.parquet`).
 
 ---
 
@@ -302,13 +236,10 @@ PY
   conda env remove -n MolForge_env
   conda env create -f envs/molforge/environment.yml -n MolForge_env
   ```
-- **venv (MolForge o tools):** para actualizar, vuelve a activar el venv y usa `pip install -U paquete` o reejecuta la lista de `pip install` correspondiente.
 
 ---
 
 ## 📝 Notas y buenas prácticas
 
 - **`saved_models/`** existe en el repo pero su contenido (pesos) **no se versiona**; deja un `.gitkeep` como marcador.
-- Forzar CPU: `export CUDA_VISIBLE_DEVICES=-1` antes de ejecutar.
-- Si RDKit con `pip` falla, usa la opción **Conda** para las herramientas.
 - Mantén separados los entornos de **MolForge** y de **tools** para evitar conflictos de dependencias.

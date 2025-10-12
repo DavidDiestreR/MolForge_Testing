@@ -1,0 +1,85 @@
+id,molforge_smiles,raw_stdout
+0,CCOC1=C(C=C(C=C1)C(C(C)(C)C)N)OCC,"Here we go..
+             fp : ECFP4
+     model_type : smiles
+          input : 1 80 94 114 237 241 255 294 392 411 425 695 743 747 786 875 1057 1171 1238 1365 1380 1452 1544 1750 1773 1853 1873 1970
+     input_file : None
+     checkpoint : /mnt/d/MolForge_Testing/saved_models/ECFP4_smiles_checkpoint.pth
+         decode : greedy
+ src_vocab_size : 2052
+ trg_vocab_size : 109
+    src_seq_len : 104
+    trg_seq_len : 130
+       root_dir : /mnt/d/MolForge_Testing
+     fp_datadir : /mnt/d/MolForge_Testing/data/fingerprints/ECFP4
+  src_sp_prefix : /mnt/d/MolForge_Testing/data/sp/ECFP4_vocab_sp
+  trg_sp_prefix : /mnt/d/MolForge_Testing/data/sp/smiles_vocab_sp
+           rank : cpu
+         device : cpu
+
+The size of src vocab is 2052 and that of trg vocab is 109.
+Loading checkpoint... ECFP4 smiles
+Preprocessing input sentence...
+Encoding input sentence...
+Greedy decoding selected.
+
+Input: 1 80 94 114 237 241 255 294 392 411 425 695 743 747 786 875 1057 1171 1238 1365 1380 1452 1544 1750 1773 1853 1873 1970
+Result: C C O C 1 = C ( C = C ( C = C 1 ) C ( C ( C ) ( C ) C ) N ) O C C
+Inference finished! || Total inference time: 0mins 0secs
+"
+1,C1=CC=C(C=C1)C2C=C(NC(=O)C2C3=NC(=S)NC(=O)C34C(=NC(=S)NC4=O)C5=CC=C(C=C5)Br)C6=CC=C(C=C6)Br,"Here we go..
+             fp : ECFP4
+     model_type : smiles
+          input : 97 101 314 378 389 442 501 650 728 817 896 909 918 927 1019 1034 1060 1088 1089 1114 1157 1160 1199 1200 1279 1306 1380 1453 1499 1576 1594 1618 1631 1649 1663 1717 1724 1750 1873 1888 1958 1967
+     input_file : None
+     checkpoint : /mnt/d/MolForge_Testing/saved_models/ECFP4_smiles_checkpoint.pth
+         decode : greedy
+ src_vocab_size : 2052
+ trg_vocab_size : 109
+    src_seq_len : 104
+    trg_seq_len : 130
+       root_dir : /mnt/d/MolForge_Testing
+     fp_datadir : /mnt/d/MolForge_Testing/data/fingerprints/ECFP4
+  src_sp_prefix : /mnt/d/MolForge_Testing/data/sp/ECFP4_vocab_sp
+  trg_sp_prefix : /mnt/d/MolForge_Testing/data/sp/smiles_vocab_sp
+           rank : cpu
+         device : cpu
+
+The size of src vocab is 2052 and that of trg vocab is 109.
+Loading checkpoint... ECFP4 smiles
+Preprocessing input sentence...
+Encoding input sentence...
+Greedy decoding selected.
+
+Input: 97 101 314 378 389 442 501 650 728 817 896 909 918 927 1019 1034 1060 1088 1089 1114 1157 1160 1199 1200 1279 1306 1380 1453 1499 1576 1594 1618 1631 1649 1663 1717 1724 1750 1873 1888 1958 1967
+Result: C 1 = C C = C ( C = C 1 ) C 2 C = C ( N C ( = O ) C 2 C 3 = N C ( = S ) N C ( = O ) C 3 4 C ( = N C ( = S ) N C 4 = O ) C 5 = C C = C ( C = C 5 ) Br ) C 6 = C C = C ( C = C 6 ) Br
+Inference finished! || Total inference time: 0mins 2secs
+"
+2,COC1=CC=C(C=C1)C(=O)C2=C(C(=C3N2C4=CC=CC=C4C=C3)C(=O)OC)C(=O)OC,"Here we go..
+             fp : ECFP4
+     model_type : smiles
+          input : 9 45 78 89 145 203 322 548 586 650 695 718 760 781 807 831 841 861 906 935 944 1057 1087 1088 1152 1161 1186 1199 1285 1380 1385 1411 1446 1536 1697 1750 1775 1855 1873 1917 2021
+     input_file : None
+     checkpoint : /mnt/d/MolForge_Testing/saved_models/ECFP4_smiles_checkpoint.pth
+         decode : greedy
+ src_vocab_size : 2052
+ trg_vocab_size : 109
+    src_seq_len : 104
+    trg_seq_len : 130
+       root_dir : /mnt/d/MolForge_Testing
+     fp_datadir : /mnt/d/MolForge_Testing/data/fingerprints/ECFP4
+  src_sp_prefix : /mnt/d/MolForge_Testing/data/sp/ECFP4_vocab_sp
+  trg_sp_prefix : /mnt/d/MolForge_Testing/data/sp/smiles_vocab_sp
+           rank : cpu
+         device : cpu
+
+The size of src vocab is 2052 and that of trg vocab is 109.
+Loading checkpoint... ECFP4 smiles
+Preprocessing input sentence...
+Encoding input sentence...
+Greedy decoding selected.
+
+Input: 9 45 78 89 145 203 322 548 586 650 695 718 760 781 807 831 841 861 906 935 944 1057 1087 1088 1152 1161 1186 1199 1285 1380 1385 1411 1446 1536 1697 1750 1775 1855 1873 1917 2021
+Result: C O C 1 = C C = C ( C = C 1 ) C ( = O ) C 2 = C ( C ( = C 3 N 2 C 4 = C C = C C = C 4 C = C 3 ) C ( = O ) O C ) C ( = O ) O C
+Inference finished! || Total inference time: 0mins 1secs
+"
