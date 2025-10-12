@@ -27,9 +27,6 @@ from contextlib import redirect_stdout
 
 import pandas as pd
 
-# Forzar CPU explícitamente (sin selector GPU/CPU)
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
-
 # Import MolForge (ajusta si tu entrypoint es distinto)
 from MolForge.predict import main as molforge_main
 
