@@ -131,7 +131,7 @@ conda env update -f envs/tools/environment.yml --prune
 
 La carpeta `saved_models/` está **vacía** en este repositorio porque los **checkpoints** de MolForge son demasiado pesados para versionarlos en GitHub.
 
-Para ejecutar usar los checkpoints del modelo ya entrenado, descárgalos del repo oficial de MolForge y colócalos en `saved_models/` (manteniendo los nombres de archivo):
+Para usar los checkpoints del modelo ya entrenado, descárgalos del repo oficial de MolForge y colócalos en `saved_models/` (manteniendo los nombres de archivo):
 
 - [**top-performing**](https://drive.google.com/uc?id=1zl6HBdwYsnA4JcnOi1o6OmcrRDB5iySK) — modelos con mejor rendimiento (recomendado).
 - [**all the other models**](https://drive.google.com/uc?id=1jCtbc9lMacCyiZ3iZFEtFgOfOQYtWEuD) — el resto de modelos disponibles.
@@ -222,8 +222,6 @@ PY
 - `data/SMILES/` → entradas con SMILES (`.csv`/`.parquet`).  
 - `data/MolForge_Input/` → fingerprints generados (input a MolForge).  
 - `data/MolForge_output/` → resultados de MolForge (SMILES generados, logs).  
-
-**Sugerencia de nombres:** incluye el tipo/size del FP (`morgan_2048.parquet`) y fecha/modo en la salida (`molforge_outputs_YYYYMMDD.parquet`).
 
 ---
 
