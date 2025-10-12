@@ -1,7 +1,8 @@
-# MolForge Testing — **CPU/GPU** (Conda) · WSL + Windows (PC) o Linux (Lab)
+# MolForge Testing — **CPU** (Conda) · WSL + Windows (PC) o Linux (Lab)
 
-Este repo está preparado para ejecutar MolForge en **CPU o GPU** según disponibilidad.  
-Si tu entorno tiene PyTorch con CUDA y hay una GPU disponible, MolForge la usará **automáticamente**; si no, funcionará en **CPU** sin cambios.
+Este repositorio está configurado para ejecutar **MolForge exclusivamente en CPU** usando entornos **Conda**.  
+El entorno oficial de MolForge (`MolForge_env`) está basado en el `environment.yml` original del proyecto y está pensado **solo para inferencia en CPU**.  
+Las tareas de **preprocesado** (como convertir SMILES → fingerprints) se realizan con el entorno auxiliar `molforge-tools`. 
 
 ---
 
@@ -19,8 +20,8 @@ MolForge_Testing/
 │  └─ MolForge_output/              # resultados de MolForge
 ├─ saved_models/                    # Checkpoints del repo de MolForge (descarregar a banda)
 ├─ scripts/
-│  ├─ smiles_to_fps.py              # convierte SMILES → fingerprints (CPU)
-│  └─ run_molforge.py               # ejecuta MolForge (CPU/GPU) fila a fila y guarda resultats
+│  ├─ smiles_to_fps.py              # convierte SMILES → fingerprints
+│  └─ run_molforge.py               # ejecuta MolForge fila a fila y guarda resultats
 ├─ notebooks/
 │  ├─ 01_smiles_to_fps.ipynb
 │  └─ 02_run_molforge_cpu.ipynb
@@ -39,8 +40,6 @@ MolForge_Testing/
      ```yaml
      - "MolForge @ git+https://github.com/knu-lcbc/MolForge.git"
      ```
-   - Este proyecto soporta **CPU y GPU** (si tu YAML incluye PyTorch con CUDA).
-
 ---
 
 ## 🐧 Instalar Ubuntu (WSL) por primera vez
@@ -86,7 +85,7 @@ conda --version
 
 ## 🛠️ Entornos (Conda)
 
-### A) Entorno **MolForge** (CPU/GPU)
+### A) Entorno **MolForge**
 
 > Usaremos el `environment.yml` oficial (incluye PyTorch y, si se desea, soporte CUDA).
 
@@ -98,12 +97,6 @@ cd /mnt/d/MolForge_Testing          # PC (WSL)
 conda env create -f envs/molforge/environment.yml -n MolForge_env
 conda activate MolForge_env
 ```
-
-- **GPU (automático):** se usará si `torch.cuda.is_available()` es `True`.  
-- **Forzar CPU (opcional):** si quieres desactivar GPU en una sesión concreta:
-  ```bash
-  CUDA_VISIBLE_DEVICES=-1 python scripts/run_molforge.py ...
-  ```
 
 ### B) Entorno **molforge-tools** (RDKit + pandas)
 
@@ -147,7 +140,7 @@ Para ejecutar usar los checkpoints del modelo ya entrenado, descárgalos del rep
 
 ---
 
-## 🔁 Flujo de trabajo (CPU/GPU)
+## 🔁 Flujo de trabajo
 
 ### 1) SMILES → Fingerprints (RDKit)
 
@@ -167,7 +160,7 @@ python scripts/smiles_to_fps.py \
   --output data/MolForge_input/morgan_2048.parquet
 ```
 
-### 2) Fingerprints → MolForge (CPU/GPU)
+### 2) Fingerprints → MolForge
 
 **Opción Notebook:**  
 Abre `notebooks/02_run_molforge_cpu.ipynb` y define:
@@ -194,7 +187,7 @@ python scripts/run_molforge.py \
 
 ## ✅ Comprobaciones de instalación
 
-**MolForge (CPU/GPU):**
+**MolForge:**
 ```bash
 conda activate MolForge_env
 python - << 'PY'
@@ -251,5 +244,4 @@ PY
 ## 📝 Notas y buenas prácticas
 
 - **`saved_models/`** existe en el repo pero su contenido (pesos) **no se versiona**; deja un `.gitkeep` como marcador.
-- **Selección de dispositivo**: por defecto, PyTorch/MolForge elige GPU si está disponible; usa `CUDA_VISIBLE_DEVICES=-1` para forzar CPU en una ejecución concreta.
 - Mantén separados los entornos de **MolForge** y de **tools** para evitar conflictos de dependencias.
