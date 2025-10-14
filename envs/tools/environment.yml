@@ -7,3 +7,6 @@ dependencies:
   - pandas
   - pyarrow
   - numpy
+  - ipykernel
+  - jupyterlab
+  - ipywidgets
