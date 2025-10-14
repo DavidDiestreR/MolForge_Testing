@@ -128,11 +128,6 @@ conda env create -f envs/tools/environment.yml
 conda activate molforge-tools
 ```
 
-**Actualizar el entorno de tools cuando cambies el YAML:**
-```bash
-conda env update -f envs/tools/environment.yml --prune
-```
-
 ---
 
 ## 🧠 Checkpoints y carpeta `saved_models`
