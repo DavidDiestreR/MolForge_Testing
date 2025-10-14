@@ -33,10 +33,10 @@ MolForge_Testing/
 ## 🧩 Requisitos
 
 1) **WSL2 + Ubuntu 22.04** instalados en Windows (ver guía abajo en caso de estar en PC Windows).  
-2) **Conda/Miniconda** instalado dentro de **Ubuntu**.  
+2) **Conda/Miniconda** instalado.  
 3) **Environment oficial de MolForge**: (No hace falta hacerlo porque ya está importado en este repositorio)
    - Copia el `environment.yml` **del repo oficial de MolForge** a `envs/molforge/environment.yml`.
-   - **Añade en la sección `- pip:` la instalación del paquete**, por ejemplo:
+   - **Añade en la sección `- pip:` la instalación del paquete**:
      ```yaml
      - "MolForge @ git+https://github.com/knu-lcbc/MolForge.git"
      ```
@@ -51,11 +51,7 @@ wsl --update
 wsl -l -v      # debe mostrar Ubuntu con VERSION 2
 ```
 
-**Rutas del proyecto según máquina (adaptar a la ruta personal de cada uno):**  
-- **PC (WSL):** `D:\MolForge_Testing` (Windows) ↔ `/mnt/d/MolForge_Testing` (Ubuntu)  
-- **Laboratorio (Linux):** `/export/home/ddiestre/MolForge_Testing`
-
-Abrir Ubuntu ya dentro del proyecto:
+**Abrir Ubuntu ya dentro del proyecto:**
 ```powershell
 # PC (WSL):
 wsl -d Ubuntu --cd /mnt/d/MolForge_Testing
@@ -79,6 +75,18 @@ exec bash
 
 # comprobar
 conda --version
+```
+
+---
+
+## 📦 Instalar Conda en Windows
+
+Instalar **[Miniconda](https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe)** (Selecciona "Just Me" y deja la ruta por defecto).
+
+Una vez instalado MiniConda por primera vez abrir AnacondaPrompt y escribir "conda init bash" (De esta forma se podrá usar conda desde Git Bash)
+
+```bash
+conda init bash
 ```
 
 ---
