@@ -246,15 +246,23 @@ PY
 
 ---
 
-## 📓 Ejecutar notebooks en WSL con el entorno Conda
+## 📓 Ejecutar notebooks con el entorno Conda
 
-Si tu **proyecto está en Windows** (por ejemplo `D:\MolForge_Testing` ↔ `/mnt/d/MolForge_Testing`) y el **entorno Conda** vive en **WSL**, puedes usar ese entorno en JupyterLab registrándolo como *kernel* y lanzando Jupyter desde WSL. Activa primero tu entorno `MolForge_env` en WSL y ejecuta:
+Activa primero tu entorno `MolForge_env`/`molforge-tools` y ejecuta:
 
 ```bash
+# En MolForge_env (línea por línea)
 conda install -y ipykernel
 conda install -y jupyterlab
-python -m ipykernel install --user --name MolForge_env --display-name "Python (MolForge_env WSL)"
 conda install -y ipywidgets
+python -m ipykernel install --user --name MolForge_env --display-name "Python (MolForge_env)"
+
+# En molforge-tools (los paquetes ya van instalados en el yml)
+python -m ipykernel install --user --name molforge-tools --display-name "Python (molforge-tools)"
+```
+
+Una vez instalado el entorno, ejecuta:
+```bash
 jupyter lab --no-browser --ip=0.0.0.0
 ```
 
@@ -262,22 +270,11 @@ jupyter lab --no-browser --ip=0.0.0.0
 
 ---
 
-## 🧹 Eliminar el entorno y el kernel (solo WSL)
+### 🚨 Limpieza si eliminas entornos
+Quitar kernel “zombi” después de borrar un entorno:
+```bash
+jupyter kernelspec list
+jupyter kernelspec uninstall MolForge_env -y
+jupyter kernelspec uninstall molforge-tools -y
+```
 
-Si registraste el kernel con `python -m ipykernel install --user ...`, **al borrar el entorno con Conda no se elimina automáticamente el kernel de Jupyter**. Para una limpieza completa en **WSL**, haz lo siguiente:
-
-1. **Eliminar el entorno Conda**:
-   ```bash
-   conda deactivate
-   conda env remove -n MolForge_env
-   ```
-
-2. **Eliminar el kernel de Jupyter asociado** (evita que quede “zombi” en la lista de kernels):
-   ```bash
-   jupyter kernelspec list
-   jupyter kernelspec uninstall MolForge_env -y
-   ```
-
-   > En WSL la *kernelspec* suele residir en: `~/.local/share/jupyter/kernels/MolForge_env`
-
-Con estos pasos, desaparecerán tanto el entorno como su entrada en la lista de kernels de Jupyter.
