@@ -274,7 +274,7 @@ jupyter lab --no-browser --ip=0.0.0.0
 ---
 
 ### 🚨 Limpieza si eliminas entornos
-Quitar kernel “zombi” después de borrar un entorno:
+Quitar kernel “zombi” antes de borrar un entorno:
 ```bash
 jupyter kernelspec list
 jupyter kernelspec uninstall MolForge_env -y
