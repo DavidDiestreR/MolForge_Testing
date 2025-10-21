@@ -32,14 +32,15 @@ MolForge_Testing/
 
 ## 🧩 Requisitos
 
-1) **WSL2 + Ubuntu 22.04** instalados en Windows (ver guía abajo en caso de estar en PC Windows).  
-2) **Conda/Miniconda** instalado.  
-3) **Environment oficial de MolForge**: (No hace falta hacerlo porque ya está importado en este repositorio)
-   - Copia el `environment.yml` **del repo oficial de MolForge** a `envs/molforge/environment.yml`.
-   - **Añade en la sección `- pip:` la instalación del paquete**:
+1) **WSL2 + Ubuntu 22.04** instalados en Windows (En caso de estar en PC Windows ver guía abajo en "🐧").  
+2) **Conda/Miniconda** instalado (ver guía de instalación abajo en "📦").  
+3) **Environment oficial de MolForge**: (NO HACE FALTA HACERLO porque ya está importado en este repositorio)
+   - Copia el `environment.yml` del repo oficial de MolForge a `envs/molforge/environment.yml`.
+   - Añade en la sección `- pip:` la instalación del paquete:
      ```yaml
      - "MolForge @ git+https://github.com/knu-lcbc/MolForge.git"
      ```
+4)**Checkpoints del repositorio de MolForge** descargados (ver guía de descarga abajo en "🧠")
      
 ---
 
@@ -56,10 +57,6 @@ wsl -l -v      # debe mostrar Ubuntu con VERSION 2
 ```powershell
 # PC (WSL):
 wsl -d Ubuntu --cd /mnt/d/MolForge_Testing
-```
-```bash
-# Laboratorio (Linux):
-cd /export/home/ddiestre/MolForge_Testing
 ```
 
 ---
@@ -127,12 +124,15 @@ Para usar los checkpoints del modelo ya entrenado, descárgalos del repo oficial
 
 ### A) Entorno **MolForge**
 
-> Usaremos el `environment.yml` oficial (incluye PyTorch y, si se desea, soporte CUDA).
+> Usaremos el `environment.yml` oficial.
 
 ```bash
-# PC (WSL) — o adapta a la ruta del Lab si trabajas allí
-cd /mnt/d/MolForge_Testing          # PC (WSL)
-# cd /export/home/ddiestre/MolForge_Testing   # Laboratorio (Linux)
+# PC (WSL)
+wsl -d Ubuntu --cd /mnt/d/MolForge_Testing   # PC
+cd /mnt/d/MolForge_Testing   # PC (ya con Ubuntu abierto)
+
+# Laboratorio (Linux)
+cd /export/home/ddiestre/MolForge_Testing
 
 conda env create -f envs/molforge/environment.yml -n MolForge_env
 conda activate MolForge_env
@@ -151,10 +151,12 @@ conda activate molforge-tools
 
 **Ubuntu (WSL o Lab):**
 ```bash
-# PC (WSL):
-cd /mnt/d/MolForge_Testing
-# o Laboratorio:
-# cd /export/home/ddiestre/MolForge_Testing
+# PC (WSL)
+wsl -d Ubuntu --cd /mnt/d/MolForge_Testing   # PC
+cd /mnt/d/MolForge_Testing   # PC (ya con Ubuntu abierto)
+
+# Laboratorio (Linux)
+cd /export/home/ddiestre/MolForge_Testing
 
 conda env create -f envs/tools/environment.yml
 conda activate molforge-tools
