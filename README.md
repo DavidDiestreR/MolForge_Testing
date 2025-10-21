@@ -6,7 +6,7 @@ Las tareas de **preprocesado** (como convertir SMILES → fingerprints) se reali
 
 ---
 
-## 📁 Estructura
+## 📁 Estructura - [MODIFICAR]
 
 ```
 MolForge_Testing/
@@ -110,6 +110,19 @@ conda init bash
 
 ---
 
+## 🧠 Checkpoints y carpeta `saved_models`
+
+La carpeta `saved_models/` está **vacía** en este repositorio porque los **checkpoints** de MolForge son demasiado pesados para versionarlos en GitHub.
+
+Para usar los checkpoints del modelo ya entrenado, descárgalos del repo oficial de MolForge y colócalos en `saved_models/` (manteniendo los nombres de archivo):
+
+- [**top-performing**](https://drive.google.com/uc?id=1zl6HBdwYsnA4JcnOi1o6OmcrRDB5iySK) — modelos con mejor rendimiento (recomendado).
+- [**all the other models**](https://drive.google.com/uc?id=1jCtbc9lMacCyiZ3iZFEtFgOfOQYtWEuD) — el resto de modelos disponibles.
+
+> Tras descargar, descomprime y verifica que el checkpoint que usarás existe en `saved_models/`.
+
+---
+
 ## 🛠️ Entornos (Conda)
 
 ### A) Entorno **MolForge**
@@ -149,20 +162,87 @@ conda activate molforge-tools
 
 ---
 
-## 🧠 Checkpoints y carpeta `saved_models`
+## ✅ Comprobaciones de instalación
 
-La carpeta `saved_models/` está **vacía** en este repositorio porque los **checkpoints** de MolForge son demasiado pesados para versionarlos en GitHub.
+**MolForge:**
+```bash
+conda activate MolForge_env
+python - << 'PY'
+import torch
+print("torch:", torch.__version__)
+print("build CUDA:", torch.version.cuda)            # None => build CPU-only
+print("cuda available?:", torch.cuda.is_available())
+print("selected device:", "cuda" if torch.cuda.is_available() else "cpu")
+from MolForge import main as _mf
+print("MolForge import OK (MolForge)")
+PY
+```
 
-Para usar los checkpoints del modelo ya entrenado, descárgalos del repo oficial de MolForge y colócalos en `saved_models/` (manteniendo los nombres de archivo):
-
-- [**top-performing**](https://drive.google.com/uc?id=1zl6HBdwYsnA4JcnOi1o6OmcrRDB5iySK) — modelos con mejor rendimiento (recomendado).
-- [**all the other models**](https://drive.google.com/uc?id=1jCtbc9lMacCyiZ3iZFEtFgOfOQYtWEuD) — el resto de modelos disponibles.
-
-> Tras descargar, descomprime y verifica que el checkpoint que usarás existe en `saved_models/`.
+**molforge-tools:**
+```bash
+conda activate molforge-tools
+python - << 'PY'
+import pandas as pd
+print("pandas:", pd.__version__)
+try:
+    from rdkit import Chem
+    print("rdkit MolFromSmiles test:", Chem.MolFromSmiles("CCO") is not None)
+except Exception as e:
+    print("RDKit import FAILED:", e)
+PY
+```
 
 ---
 
-## 🔁 Flujo de trabajo
+## 🔄 Actualizar entornos
+
+- **tools (Conda):**
+  ```bash
+  conda env update -f envs/tools/environment.yml --prune
+  ```
+- **MolForge_env (Conda):** si cambia el YAML oficial, lo más limpio es recrear:
+  ```bash
+  conda env remove -n MolForge_env
+  conda env create -f envs/molforge/environment.yml -n MolForge_env
+  ```
+
+---
+
+## 📓 Ejecutar notebooks con Jupyter
+
+Activa primero tu entorno `MolForge_env`/`molforge-tools` y ejecuta:
+
+```bash
+# En MolForge_env (línea por línea)
+conda install -y ipykernel
+conda install -y jupyterlab
+conda install -y ipywidgets
+python -m ipykernel install --user --name MolForge_env --display-name "Python (MolForge_env)"
+
+# En molforge-tools (los paquetes ya van instalados en el yml)
+python -m ipykernel install --user --name molforge-tools --display-name "Python (molforge-tools)"
+```
+
+Una vez instalado el entorno, ejecuta:
+```bash
+jupyter lab --no-browser --ip=0.0.0.0
+```
+
+> Abre la URL con token que imprime Jupyter en tu navegador de Windows. Dentro de JupyterLab, selecciona el kernel **Python (MolForge_env WSL)** para ejecutar los notebooks con ese entorno.
+
+---
+
+### 🚨 Limpieza si eliminas entornos
+Quitar kernel “zombi” antes de borrar un entorno:
+```bash
+jupyter kernelspec list
+jupyter kernelspec uninstall MolForge_env -y
+jupyter kernelspec uninstall molforge-tools -y
+```
+
+---
+
+## 🔁 Flujo de trabajo - [MODIFICAR]
 
 ### 1) SMILES → Fingerprints (RDKit)
 
@@ -204,99 +284,3 @@ python scripts/run_molforge.py \
   --decode greedy \
   --out data/MolForge_output/molforge_outputs.parquet
 ```
-
----
-
-## ✅ Comprobaciones de instalación
-
-**MolForge:**
-```bash
-conda activate MolForge_env
-python - << 'PY'
-import torch
-print("torch:", torch.__version__)
-print("build CUDA:", torch.version.cuda)            # None => build CPU-only
-print("cuda available?:", torch.cuda.is_available())
-print("selected device:", "cuda" if torch.cuda.is_available() else "cpu")
-from MolForge import main as _mf
-print("MolForge import OK (MolForge)")
-PY
-```
-
-**molforge-tools:**
-```bash
-conda activate molforge-tools
-python - << 'PY'
-import pandas as pd
-print("pandas:", pd.__version__)
-try:
-    from rdkit import Chem
-    print("rdkit MolFromSmiles test:", Chem.MolFromSmiles("CCO") is not None)
-except Exception as e:
-    print("RDKit import FAILED:", e)
-PY
-```
-
----
-
-## 📂 Gestión de datos
-
-- `data/SMILES/` → entradas con SMILES (`.csv`/`.parquet`).  
-- `data/MolForge_Input/` → fingerprints generados (input a MolForge).  
-- `data/MolForge_output/` → resultados de MolForge (SMILES generados, logs).  
-
----
-
-## 🔄 Actualizar entornos
-
-- **tools (Conda):**
-  ```bash
-  conda env update -f envs/tools/environment.yml --prune
-  ```
-- **MolForge_env (Conda):** si cambia el YAML oficial, lo más limpio es recrear:
-  ```bash
-  conda env remove -n MolForge_env
-  conda env create -f envs/molforge/environment.yml -n MolForge_env
-  ```
-
----
-
-## 📝 Notas y buenas prácticas
-
-- **`saved_models/`** existe en el repo pero su contenido (pesos) **no se versiona**; deja un `.gitkeep` como marcador.
-- Mantén separados los entornos de **MolForge** y de **tools** para evitar conflictos de dependencias.
-
----
-
-## 📓 Ejecutar notebooks con el entorno Conda
-
-Activa primero tu entorno `MolForge_env`/`molforge-tools` y ejecuta:
-
-```bash
-# En MolForge_env (línea por línea)
-conda install -y ipykernel
-conda install -y jupyterlab
-conda install -y ipywidgets
-python -m ipykernel install --user --name MolForge_env --display-name "Python (MolForge_env)"
-
-# En molforge-tools (los paquetes ya van instalados en el yml)
-python -m ipykernel install --user --name molforge-tools --display-name "Python (molforge-tools)"
-```
-
-Una vez instalado el entorno, ejecuta:
-```bash
-jupyter lab --no-browser --ip=0.0.0.0
-```
-
-> Abre la URL con token que imprime Jupyter en tu navegador de Windows. Dentro de JupyterLab, selecciona el kernel **Python (MolForge_env WSL)** para ejecutar los notebooks con ese entorno.
-
----
-
-### 🚨 Limpieza si eliminas entornos
-Quitar kernel “zombi” antes de borrar un entorno:
-```bash
-jupyter kernelspec list
-jupyter kernelspec uninstall MolForge_env -y
-jupyter kernelspec uninstall molforge-tools -y
-```
-
