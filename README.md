@@ -40,7 +40,7 @@ MolForge_Testing/
      ```yaml
      - "MolForge @ git+https://github.com/knu-lcbc/MolForge.git"
      ```
-4)**Checkpoints del repositorio de MolForge** descargados (ver guía de descarga abajo en "🧠")
+4) **Checkpoints del repositorio de MolForge** descargados (ver guía de descarga abajo en "🧠")
      
 ---
 
