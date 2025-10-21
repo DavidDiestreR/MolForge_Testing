@@ -40,6 +40,7 @@ MolForge_Testing/
      ```yaml
      - "MolForge @ git+https://github.com/knu-lcbc/MolForge.git"
      ```
+     
 ---
 
 ## 🐧 Instalar Ubuntu (WSL) por primera vez
@@ -75,6 +76,24 @@ exec bash
 
 # comprobar
 conda --version
+```
+
+---
+
+## 📦 Instalar Conda en Ubuntu (lab) - se ha de hacer una vez en cada pc
+
+Descargar **[Miniconda](https://repo.anaconda.com/archive/Anaconda3-2025.06-0-Linux-x86_64.sh)**
+
+Desde downloads:
+```bash
+# darle permisos de ejecución
+chmod +x Anaconda3-2025.06-0-Linux-x86_64.sh
+
+# ejecutar
+./Anaconda3-2025.06-0-Linux-x86_64.sh
+
+# comprobar
+conda
 ```
 
 ---
