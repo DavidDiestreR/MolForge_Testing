@@ -18,12 +18,10 @@ __pycache__/
 
 # --- Jupyter ---
 .ipynb_checkpoints/
+.virtual_documents/
 
 # --- Entornos / paquetes ---
 .venv/
-venv/
-env/
-envs/
 .env
 .conda/
 conda-meta/
@@ -37,10 +35,6 @@ pip-wheel-metadata/
 *.code-workspace
 .DS_Store
 Thumbs.db
-
-# --- Build / distribución ---
-build/
-dist/
 
 # --- Tests / cobertura / tmp ---
 .pytest_cache/
