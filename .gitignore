@@ -56,6 +56,9 @@ tensorboard/
 saved_models/*
 !saved_models/.gitkeep
 
+# --- Installers ---
+*.sh
+
 # --- Whitelists útiles ---
 # Asegura que los environment.yml se versionan siempre, incluso si una regla general los afectara.
 !**/environment.yml
