@@ -287,4 +287,3 @@ python scripts/run_molforge.py \
   --decode greedy \
   --out data/MolForge_output/molforge_outputs.parquet
 ```
-
