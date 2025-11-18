@@ -228,7 +228,7 @@ python -m ipykernel install --user --name molforge-tools --display-name "Python 
 
 Una vez instalado el entorno, ejecuta:
 ```bash
-jupyter lab --no-browser --ip=0.0.0.0
+jupyter lab --ip=0.0.0.0
 ```
 
 > Abre la URL con token que imprime Jupyter en tu navegador de Windows. Dentro de JupyterLab, selecciona el kernel **Python (MolForge_env WSL)** para ejecutar los notebooks con ese entorno.
