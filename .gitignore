@@ -53,8 +53,9 @@ tensorboard/
 .checkpoints/
 
 # --- Carpeta de modelos: existe en el repo pero sin pesos ---
-saved_models/*
-!saved_models/.gitkeep
+notebooks/MolForge/saved_models/*
+!notebooks/MolForge/saved_models/.gitkeep
+*.pth
 
 # --- Installers ---
 *.sh
