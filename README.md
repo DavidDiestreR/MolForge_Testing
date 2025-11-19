@@ -23,7 +23,6 @@ MolForge_Testing/
 │  ├─ MolForge/
 │  │  ├─ data/sp/                         # vocabulario (importado del repo de MolForge)
 │  │  ├─ saved_models/                    # checkpoints del repo de MolForge (descargar a parte en "🧠")
-│  │  ├─ predict.py                       # script que ejecuta molforge (se le llama en el notebook) (importado del repo de MolForge)
 │  │  └─ fps_to_smiles_MolForge.ipynb
 │  └─ analysis/
 │  │  └─ MolForge_evaluation.ipynb
