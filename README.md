@@ -16,16 +16,19 @@ MolForge_Testing/
 ├─ data/
 │  ├─ SMILES/                             # entradas con SMILES
 │  ├─ MolForge_input/                     # fingerprints (input para MolForge)
-│  └─ MolForge_output/                    # resultados de MolForge
+│  ├─ MolForge_output/                    # resultados de MolForge
+│  └─ analysis_output/
 ├─ notebooks/
 │  ├─ preprocessing/
-│  │  └─ smiles_to_fps_RDKit.ipynb
+│  │  └─ 
 │  ├─ MolForge/
 │  │  ├─ data/sp/                         # vocabulario (importado del repo de MolForge)
 │  │  ├─ saved_models/                    # checkpoints del repo de MolForge (descargar a parte en "🧠")
 │  │  └─ fps_to_smiles_MolForge.ipynb
 │  └─ analysis/
-│  │  └─ MolForge_evaluation.ipynb
+│     └─ MolForge_evaluation.ipynb
+├─ src/
+│  └─ smiles_to_fp.py                     # funciones RDKit
 └─ .gitignore
 ```
 
