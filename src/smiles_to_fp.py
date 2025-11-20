@@ -20,7 +20,7 @@ Comportament especial:
 """
 
 from rdkit import Chem
-from rdkit.Chem import MACCSkeys, rdMolDescriptors, rdFingerprintGenerator
+from rdkit.Chem import MACCSkeys, rdMolDescriptors, AllChem
 from rdkit.Avalon import pyAvalonTools
 
 
@@ -64,7 +64,7 @@ def smiles_to_mol(smiles: str):
 
 def mol_to_fingerprint(mol, fp_type: str, n_bits: int = 2048):
     """
-    Converteix un Mol en el fingerprint especificat.
+    Converteix un Mol en el fingerprint especificat, seguint la implementació de MolForge.
 
     Paràmetres
     ----------
@@ -74,7 +74,7 @@ def mol_to_fingerprint(mol, fp_type: str, n_bits: int = 2048):
         Nom del fingerprint (veure llista al docstring del mòdul).
     n_bits : int
         Mida del fingerprint per als tipus "hashed" (ECFP*, FCFP, HashAP, HashTT, RDK4, RDK4-L).
-        Per MACCS i Avalon s'ignora i es fa servir la mida estàndard (166 i 512).
+        Per MACCS i Avalon s'ignora (166 i 512).
 
     Retorn
     ------
@@ -83,117 +83,130 @@ def mol_to_fingerprint(mol, fp_type: str, n_bits: int = 2048):
     o bé llença ValueError si el tipus de fingerprint no està suportat.
     """
     if mol is None:
-        # Cas general: si l'entrada ja és None, propaguem None
         return None
 
     key = _normalize_fp_type(fp_type)
 
     # --- Predefined substructures ---
     if key == "MACCS":
-        # MACCS: 166 bits basat en SMARTS
+        # MACCS: 166 bits (igual que MAACS() de MolForge)
         return MACCSkeys.GenMACCSKeys(mol)
 
-    # --- Paths and feature classes (Avalon) ---
+    # --- Avalon ---
     elif key == "AVALON":
-        # Al paper fan servir 512 bits per Avalon
+        # Avalon: 512 bits, igual que Avalon() de MolForge
         return pyAvalonTools.GetAvalonFP(mol, nBits=512)
 
     # --- Path-based fingerprints (RDKit + atom pairs) ---
     elif key == "RDK4":
-        # RDKit fingerprint: subgràfics ramificats i lineals de longitud 2–4
+        # RDK4: minPath=2, maxPath=4, nBitsPerHash=1 (com al codi RDK4 de MolForge)
         return Chem.RDKFingerprint(
             mol,
             fpSize=n_bits,
             minPath=2,
             maxPath=4,
+            nBitsPerHash=1,
             branchedPaths=True,
         )
 
     elif key == "RDK4L":
-        # Variant sense ramificació (només camins lineals)
+        # RDK4_L: igual però sense camins ramificats (branchedPaths=False)
         return Chem.RDKFingerprint(
             mol,
             fpSize=n_bits,
             minPath=2,
             maxPath=4,
+            nBitsPerHash=1,
             branchedPaths=False,
         )
 
     elif key == "HASHAP":
-        # Atom pair fingerprint hashed a n_bits, amb distància 1–6 (paper)
-        return rdMolDescriptors.GetHashedAtomPairFingerprintAsBitVect(
+        # HashAP: GetHashedAtomPairFingerprint (vector espars de comptatges)
+        # minLength=1, maxLength=6 com al MolForge.HashAP
+        return rdMolDescriptors.GetHashedAtomPairFingerprint(
             mol,
             nBits=n_bits,
             minLength=1,
             maxLength=6,
         )
 
-    # --- 4-atom paths (Topological torsion) ---
+    # --- Topological torsions ---
     elif key == "TT":
-        # Topological torsion "sparse" (vector de comptes)
-        # Equivalent al que anomenen TT al paper.
+        # TT: vector espars de comptatges (no hashed a mida fixa)
         return rdMolDescriptors.GetTopologicalTorsionFingerprint(mol)
 
     elif key == "HASHTT":
-        # Versió hashed a n_bits (HashTT al paper)
-        return rdMolDescriptors.GetHashedTopologicalTorsionFingerprintAsBitVect(
+        # HashTT: versió hashed (vector espars de comptatges)
+        return rdMolDescriptors.GetHashedTopologicalTorsionFingerprint(
             mol,
             nBits=n_bits,
         )
 
-    # --- Circular fingerprints (Morgan / AEs / FCFP / ECFP) ---
+    # --- Circular env (Morgan / AEs / ECFP / FCFP) ---
     elif key == "AES":
-        # AEs: Morgan radius 1 en forma esparsa (sense hashing a n_bits)
-        # Aquest és el "sparse ECFP" que fan servir com a atomic environments.
-        gen = rdFingerprintGenerator.GetMorganGenerator(radius=1)
-        return gen.GetSparseCountFingerprint(mol)
+        # AEs: GetMorganFingerprint(mol, radius=1) -> vector espars (no hashed)
+        return rdMolDescriptors.GetMorganFingerprint(mol, radius=1)
 
     elif key == "ECFP0":
-        # ECFP0: Morgan radius 0 hashed a n_bits (bit vector)
-        gen = rdFingerprintGenerator.GetMorganGenerator(radius=0, fpSize=n_bits)
-        return gen.GetFingerprint(mol)
+        # ECFP0: GetHashedMorganFingerprint radius=0, nBits=2048 (vector espars de comptatges)
+        return rdMolDescriptors.GetHashedMorganFingerprint(
+            mol,
+            radius=0,
+            nBits=n_bits,
+        )
 
-    # --- ECFP2 / ECFP4 ES PARS (COUNTED) ---
     elif key == "ECFP2":
-        # ECFP2 (sense estrella): forma esparsa / counted (no bit vector explícit)
-        gen = rdFingerprintGenerator.GetMorganGenerator(radius=1)
-        return gen.GetSparseCountFingerprint(mol)
+        # ECFP2: GetHashedMorganFingerprint radius=1 (vector espars de comptatges)
+        return rdMolDescriptors.GetHashedMorganFingerprint(
+            mol,
+            radius=1,
+            nBits=n_bits,
+        )
 
     elif key == "ECFP4":
-        # ECFP4 (sense estrella): forma esparsa / counted
-        gen = rdFingerprintGenerator.GetMorganGenerator(radius=2)
-        return gen.GetSparseCountFingerprint(mol)
+        # ECFP4: GetHashedMorganFingerprint radius=2 (vector espars de comptatges)
+        return rdMolDescriptors.GetHashedMorganFingerprint(
+            mol,
+            radius=2,
+            nBits=n_bits,
+        )
 
-    # --- ECFP2* / ECFP4* EXPLÍCITS EN BITS ---
+    # --- ECFP2* / ECFP4* = versions "bit vector" (equivalent a ECFP2_ / ECFP4_ de MolForge) ---
     elif key == "ECFP2*":
-        # ECFP2*: versió explícita en bits (hashing a n_bits)
-        gen = rdFingerprintGenerator.GetMorganGenerator(radius=1, fpSize=n_bits)
-        return gen.GetFingerprint(mol)
+        # ECFP2*: AllChem.GetMorganFingerprintAsBitVect radius=1
+        return AllChem.GetMorganFingerprintAsBitVect(
+            mol,
+            radius=1,
+            nBits=n_bits,
+        )
 
     elif key == "ECFP4*":
-        # ECFP4*: versió explícita en bits (hashing a n_bits)
-        gen = rdFingerprintGenerator.GetMorganGenerator(radius=2, fpSize=n_bits)
-        return gen.GetFingerprint(mol)
+        # ECFP4*: AllChem.GetMorganFingerprintAsBitVect radius=2
+        return AllChem.GetMorganFingerprintAsBitVect(
+            mol,
+            radius=2,
+            nBits=n_bits,
+        )
 
+    # --- FCFP (feature-based Morgan) ---
     elif key == "FCFP2":
-        # FCFP2: Morgan radius 1 amb features farmacofòriques (bit vector)
-        gen = rdFingerprintGenerator.GetMorganGenerator(
+        # FCFP2: GetHashedMorganFingerprint radius=1, useFeatures=True (vector espars)
+        return rdMolDescriptors.GetHashedMorganFingerprint(
+            mol,
             radius=1,
-            fpSize=n_bits,
+            nBits=n_bits,
             useFeatures=True,
         )
-        return gen.GetFingerprint(mol)
 
     elif key == "FCFP4":
-        # FCFP4: Morgan radius 2 amb features farmacofòriques (bit vector)
-        gen = rdFingerprintGenerator.GetMorganGenerator(
+        # FCFP4: GetHashedMorganFingerprint radius=2, useFeatures=True (vector espars)
+        return rdMolDescriptors.GetHashedMorganFingerprint(
+            mol,
             radius=2,
-            fpSize=n_bits,
+            nBits=n_bits,
             useFeatures=True,
         )
-        return gen.GetFingerprint(mol)
 
-    # --- Cap cas coincideix: fingerprint no suportat ---
     else:
         raise ValueError(
             f"Tipus de fingerprint no suportat: '{fp_type}'. "
