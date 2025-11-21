@@ -18,12 +18,10 @@ __pycache__/
 
 # --- Jupyter ---
 .ipynb_checkpoints/
+.virtual_documents/
 
 # --- Entornos / paquetes ---
 .venv/
-venv/
-env/
-envs/
 .env
 .conda/
 conda-meta/
@@ -37,10 +35,6 @@ pip-wheel-metadata/
 *.code-workspace
 .DS_Store
 Thumbs.db
-
-# --- Build / distribución ---
-build/
-dist/
 
 # --- Tests / cobertura / tmp ---
 .pytest_cache/
@@ -59,8 +53,12 @@ tensorboard/
 .checkpoints/
 
 # --- Carpeta de modelos: existe en el repo pero sin pesos ---
-saved_models/*
-!saved_models/.gitkeep
+notebooks/MolForge/saved_models/*
+!notebooks/MolForge/saved_models/.gitkeep
+*.pth
+
+# --- Installers ---
+*.sh
 
 # --- Whitelists útiles ---
 # Asegura que los environment.yml se versionan siempre, incluso si una regla general los afectara.

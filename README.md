@@ -6,25 +6,30 @@ Las tareas de **preprocesado** (como convertir SMILES → fingerprints) se reali
 
 ---
 
-## 📁 Estructura - [MODIFICAR]
+## 📁 Estructura - [IR ACTUALIZANDO]
 
 ```
 MolForge_Testing/
 ├─ envs/
-│  ├─ molforge/environment.yml      # environment oficial de MolForge
-│  └─ tools/environment.yml         # RDKit + pandas (ligero)
+│  ├─ molforge/environment.yml            # environment oficial de MolForge (con la instalación del paquete añadida)
+│  └─ tools/environment.yml               # environment personal para hacer data science
 ├─ data/
-│  ├─ SMILES/                       # entradas con SMILES
-│  ├─ MolForge_input/               # fingerprints generados (input para MolForge)
-│  ├─ sp/                           # vocabulari (importat del repo de MolForge)
-│  └─ MolForge_output/              # resultados de MolForge
-├─ saved_models/                    # Checkpoints del repo de MolForge (descarregar a banda)
-├─ scripts/
-│  ├─ smiles_to_fps.py              # convierte SMILES → fingerprints
-│  └─ run_molforge.py               # ejecuta MolForge fila a fila y guarda resultats
+│  ├─ SMILES/                             # entradas con SMILES
+│  ├─ MolForge_input/                     # fingerprints (input para MolForge)
+│  ├─ MolForge_output/                    # resultados de MolForge
+│  └─ analysis_output/
 ├─ notebooks/
-│  ├─ 01_smiles_to_fps.ipynb
-│  └─ 02_run_molforge_cpu.ipynb
+│  ├─ preprocessing/
+│  │  └─ 
+│  ├─ MolForge/
+│  │  ├─ data/sp/                         # vocabulario (importado del repo de MolForge)
+│  │  ├─ saved_models/                    # checkpoints del repo de MolForge (descargar a parte en "🧠")
+│  │  └─ fps_to_smiles_MolForge.ipynb
+│  └─ analysis/
+│     └─ MolForge_evaluation.ipynb
+├─ src/
+│  ├─ smiles_to_fp.py                     # funcions per passar smiles a fingerprints amb el format desitjat
+│  └─ fingerprints.py                     # codi que transforma objectes mol de rdkit als SMILES (importat del repo de MolForge)
 └─ .gitignore
 ```
 
