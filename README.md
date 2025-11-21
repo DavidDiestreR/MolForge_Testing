@@ -20,13 +20,13 @@ MolForge_Testing/
 │  └─ analysis_output/
 ├─ notebooks/
 │  ├─ preprocessing/
-│  │  └─ 
+│  │  └─ SMILES_to_MolForge_input.ipynb
 │  ├─ MolForge/
 │  │  ├─ data/sp/                         # vocabulario (importado del repo de MolForge)
 │  │  ├─ saved_models/                    # checkpoints del repo de MolForge (descargar a parte en "🧠")
 │  │  └─ fps_to_smiles_MolForge.ipynb
 │  └─ analysis/
-│     └─ MolForge_evaluation.ipynb
+│     └─ Tanimoto_exactness.ipynb
 ├─ src/
 │  ├─ smiles_to_fp.py                     # funcions per passar smiles a fingerprints amb el format desitjat
 │  └─ fingerprints.py                     # codi que transforma objectes mol de rdkit als SMILES (importat del repo de MolForge)

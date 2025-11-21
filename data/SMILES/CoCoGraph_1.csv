@@ -1,0 +1,11 @@
+id,SMILES_input
+1,CCCCCN(CCCCc1c2cc3sc2nn13)C(=O)c1ccc(OCC)c(Cl)c1
+2,O=C(Nc1n[nH]c2ccc(Br)cc12)N1CCCC1
+3,CCN(C(=O)N(C)c1ccccc1OC)C(=Cc1ccc(OC)cc1)c1ccccc1C
+4,CC1(Cl)OC(=O)C1(C)Cl
+5,CCc1cc(C=CC(C)=Cc2cc(OC)ccc2C)ccc1C
+6,CCc1ccc2ccc3[nH]c(=O)n(C)c(=O)[nH]c(=O)c4ccc(c4c1)c2c1c2ccc(O)c1cc3o2
+7,CC(C)(C)C1C2CC3(CCCCC3)C3C(N2)C(C)(C)C2CCCCC2N13
+8,CC1(C)C(=O)NC(=O)N1c1ccc(C(F)(F)F)cc1Cl
+9,c1ccc2c(c1)c(OCCN1CCCCC1)c1c3sc(nc32)S1
+10,COc1ccc(OCC2c3ccccc3C(=O)N2C(C)=O)cc1
