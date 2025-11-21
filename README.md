@@ -28,7 +28,8 @@ MolForge_Testing/
 │  └─ analysis/
 │     └─ MolForge_evaluation.ipynb
 ├─ src/
-│  └─ smiles_to_fp.py                     # funciones RDKit
+│  ├─ smiles_to_fp.py                     # funcions per passar smiles a fingerprints amb el format desitjat
+│  └─ fingerprints.py                     # codi que transforma objectes mol de rdkit als SMILES (importat del repo de MolForge)
 └─ .gitignore
 ```
 
