@@ -6,7 +6,7 @@ Las tareas de **preprocesado** (como convertir SMILES → fingerprints) se reali
 
 ---
 
-## 📁 Estructura - [IR ACTUALIZANDO]
+## 📁 Estructura
 
 ```
 MolForge_Testing/
@@ -249,45 +249,4 @@ jupyter kernelspec uninstall molforge-tools -y
 
 ---
 
-## 🔁 Flujo de trabajo - [MODIFICAR]
-
-### 1) SMILES → Fingerprints (RDKit)
-
-**Opción Notebook (recomendada la primera vez):**  
-Abre `notebooks/01_smiles_to_fps.ipynb` y sigue las celdas.  
-Entrada: CSV/Parquet con columna `smiles` (opcional `id`).  
-Salida: fichero en `data/MolForge_input/` con columnas `id`, `smiles`, `fp_0000...`.
-
-**Opción Script (rápido/automatizable):**
-```bash
-conda activate molforge-tools
-
-python scripts/smiles_to_fps.py \
-  --input data/SMILES/molecules.csv \
-  --smiles-col smiles \
-  --fp morgan --radius 2 --nBits 2048 \
-  --output data/MolForge_input/morgan_2048.parquet
-```
-
-### 2) Fingerprints → MolForge
-
-**Opción Notebook:**  
-Abre `notebooks/02_run_molforge_cpu.ipynb` y define:
-- `fps_path` → fichero de `data/MolForge_input/`
-- `checkpoint_path` → ruta a tu `.pth` (local, **no versionado**)
-- `fp_name` → p. ej. `ECFP4`
-- `model_type` → `smiles` (o `selfies`)
-- `decode` → `greedy` (o `beam` si tu repo lo soporta)
-
-**Opción Script:**
-```bash
-conda activate MolForge_env
-
-python scripts/run_molforge.py \
-  --fps data/MolForge_input/morgan_2048.parquet \
-  --checkpoint /ruta/a/tu/checkpoint.pth \
-  --fp-name ECFP4 \
-  --model-type smiles \
-  --decode greedy \
-  --out data/MolForge_output/molforge_outputs.parquet
-```
+## 🔁 Flujo de trabajo - [COMPLETAR]
