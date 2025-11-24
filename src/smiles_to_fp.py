@@ -25,24 +25,6 @@ import numpy as np
 import src.fingerprints as fingerprints
 
 
-def _normalize_fp_type(fp_type: str) -> str:
-    """
-    Normalitza el nom del fingerprint per facilitar la comparació.
-
-    Exemples:
-    - "ecfp4"     -> "ECFP4"
-    - "RDK4-L"    -> "RDK4L"
-    - "RDK4_L"    -> "RDK4L"
-    - "  hashap " -> "HASHAP"
-    - "ecfp4*"    -> "ECFP4*"
-    """
-    t = fp_type.strip().upper()
-    t = t.replace(" ", "")
-    # Unifiquem guions i guions baixos
-    t = t.replace("-", "").replace("_", "")
-    return t
-
-
 def smiles_to_mol(smiles: str):
     """
     Converteix un SMILES en un objecte Mol de RDKit.
@@ -88,7 +70,7 @@ def mol_to_fingerprint(mol, fp_type: str, n_bits: int = 2048, return_bits = True
     if mol is np.nan:
         return np.nan
 
-    key = _normalize_fp_type(fp_type)
+    key = fp_type
 
     # Fem servir les funcions definides a fingerprints.py
     # Mapegem el nom normalitzat (key) amb la funció corresponent
@@ -97,29 +79,29 @@ def mol_to_fingerprint(mol, fp_type: str, n_bits: int = 2048, return_bits = True
         # A fingerprints.py es diu MAACS (mateix concepte)
         return fingerprints.MAACS(mol, return_bits=return_bits)
 
-    elif key == "AVALON":
+    elif key == "Avalon":
         return fingerprints.Avalon(mol, return_bits=return_bits)
 
     # --- Path-based fingerprints ---
     elif key == "RDK4":
         return fingerprints.RDK4(mol, return_bits=return_bits)
 
-    elif key == "RDK4L":
+    elif key == "RDK4-L":
         # A fingerprints.py és RDK4_L
         return fingerprints.RDK4_L(mol, return_bits=return_bits)
 
-    elif key == "HASHAP":
+    elif key == "HashAP":
         return fingerprints.HashAP(mol, return_bits=return_bits)
 
     # --- Topological torsions ---
     elif key == "TT":
         return fingerprints.TT(mol, return_bits=return_bits)
 
-    elif key == "HASHTT":
+    elif key == "HashTT":
         return fingerprints.HashTT(mol, return_bits=return_bits)
 
     # --- Circular env (Morgan / AEs / ECFP / FCFP) ---
-    elif key == "AES":
+    elif key == "AEs":
         return fingerprints.AEs(mol, return_bits=return_bits)
 
     elif key == "ECFP0":
@@ -186,17 +168,17 @@ def get_supported_fingerprints():
     return [
         "MACCS",
         "Avalon",
-        "HashAP",
         "RDK4",
         "RDK4-L",
+        "HashAP",
         "TT",
         "HashTT",
-        "AEs",
         "ECFP0",
         "ECFP2",
         "ECFP4",
-        "ECFP2*",
-        "ECFP4*",
         "FCFP2",
         "FCFP4",
+        "AEs",
+        "ECFP2*",
+        "ECFP4*",
     ]
