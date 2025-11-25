@@ -4,6 +4,8 @@ Este repositorio está configurado para ejecutar **MolForge exclusivamente en CP
 El entorno oficial de MolForge (`MolForge_env`) está basado en el `environment.yml` original del proyecto y está pensado **solo para inferencia en CPU**.  
 Las tareas de **preprocesado** (como convertir SMILES → fingerprints) se realizan con el entorno auxiliar `molforge-tools`. 
 
+ACTUALITZAR WORKFLOW I INDICAR QUE S'HA DE DESCARREGAR EL RAW DE COCOGRAPH DEL REPO
+
 ---
 
 ## 📁 Estructura
