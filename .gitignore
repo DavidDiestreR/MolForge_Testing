@@ -1,12 +1,3 @@
-# ===============================
-# Git ignore for MolForge project
-# ===============================
-#
-# Objetivo:
-# - Guardar TODOS los datos del proyecto por defecto (incluyendo data/ y outputs).
-# - No versionar los pesos/checkpoints en saved_models/ (solo .gitkeep como marcador).
-# - Ignorar artefactos temporales de Python/Jupyter, entornos, ficheros de editor/SO y builds.
-#
 # --- Python / general ---
 __pycache__/
 *.py[cod]
@@ -20,7 +11,7 @@ __pycache__/
 .ipynb_checkpoints/
 .virtual_documents/
 
-# --- Entornos / paquetes ---
+# --- Entorns / paquets ---
 .venv/
 .env
 .conda/
@@ -29,7 +20,7 @@ pip-wheel-metadata/
 *.egg-info/
 .eggs/
 
-# --- Editores / SO ---
+# --- Editors / SO ---
 .vscode/
 .idea/
 *.code-workspace
@@ -45,17 +36,21 @@ htmlcov/
 *.cache/
 .cache/
 
-# --- ML / tracking típicos ---
+# --- ML / tracking típics ---
 wandb/
 mlruns/
 runs/
 tensorboard/
 .checkpoints/
 
-# --- Carpeta de modelos: existe en el repo pero sin pesos ---
+# --- Carpeta de models: existeix en el repo pero sense pesos ---
 notebooks/MolForge/saved_models/*
 !notebooks/MolForge/saved_models/.gitkeep
 *.pth
+
+# --- Carpeta de raw data de CoCoGraoh: existeix en el repo pero sense les dades (fitxer massa gran)---
+data/SMILES/raw/CoCoGraph/*
+!data/SMILES/raw/CoCoGraph/.gitkeep
 
 # --- Installers ---
 *.sh
