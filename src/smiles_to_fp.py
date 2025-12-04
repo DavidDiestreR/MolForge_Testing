@@ -161,6 +161,59 @@ def smiles_to_fingerprint(smiles, fp_type: str = "ECFP4", n_bits: int = 2048, re
     return mol_to_fingerprint(mol, fp_type=fp_type, n_bits=n_bits, return_bits=return_bits)
 
 
+def mol_to_smiles(mol, canonical: bool = True, isomeric: bool = True):
+    """
+    Converteix un objecte Mol de RDKit en un SMILES (per defecte, canònic).
+
+    - Si 'mol' és np.nan -> retorna np.nan
+    - Si 'mol' és None o hi ha algun error -> retorna np.nan
+    """
+    if mol is np.nan:
+        return np.nan
+    if mol is None:
+        return np.nan
+
+    try:
+        smiles = Chem.MolToSmiles(
+            mol,
+            canonical=canonical,
+            isomericSmiles=isomeric,
+        )
+        return smiles
+    except Exception:
+        # Qualsevol problema en la conversió -> considerem que no és usable
+        return np.nan
+
+
+def smiles_to_canonical(smiles: str):
+    """
+    Aplica smiles_to_mol + mol_to_smiles per obtenir el SMILES canònic.
+
+    - Si 'smiles' és np.nan -> retorna np.nan
+    - Si el SMILES no és vàlid -> retorna el string "InvalidSMILE"
+    - Si és vàlid -> retorna el SMILES canònic (string)
+    """
+    # Cas especial: missing
+    if smiles is np.nan:
+        return np.nan
+
+    # Reutilitzem la lògica de neteja + parseig
+    mol = smiles_to_mol(smiles)
+
+    if mol is np.nan:
+        # No s’ha pogut parsejar el SMILES original
+        return "InvalidSMILE"
+
+    can_smiles = mol_to_smiles(mol, canonical=True, isomeric=True)
+
+    if can_smiles is np.nan:
+        # En el cas improbable que falli la conversió de tornada
+        return "InvalidSMILE"
+
+    return can_smiles
+
+
+
 def get_supported_fingerprints():
     """
     Retorna la llista de noms de fingerprints suportats (per conveniència).
