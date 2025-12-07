@@ -213,7 +213,6 @@ def smiles_to_canonical(smiles: str):
     return can_smiles
 
 
-
 def get_supported_fingerprints():
     """
     Retorna la llista de noms de fingerprints suportats (per conveniència).
