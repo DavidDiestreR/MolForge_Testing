@@ -17,7 +17,8 @@ MolForge_Testing/
 │  ├─ SMILES/                             # entrades amb SMILES
 │  │  └─ raw/
 │  │     ├─ CoCoGraph                     # datasets del repo de CoCoGraph (descarregar a part en "📄")
-│  │     └─ MolForge                      # datasets del repo de MolForge
+│  │     ├─ MolForge                      # datasets del repo de MolForge
+│  │     └─ PubChem                       # dataset de PubChem
 │  ├─ MolForge_input/                     # fingerprints (input per a MolForge)
 │  ├─ MolForge_output/                    # resultats de MolForge
 │  └─ analysis_output/
